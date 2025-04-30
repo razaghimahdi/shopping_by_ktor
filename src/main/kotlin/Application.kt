@@ -1,18 +1,24 @@
-package org.example
+package com.piashcse
 
-import io.ktor.server.application.*
-import org.example.infrastructure.database.configureDatabases
-import org.example.infrastructure.routes.configureRouting
+import com.piashcse.database.configureDataBase
+import com.piashcse.plugins.*
+import com.typesafe.config.ConfigFactory
+import io.ktor.server.config.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 
-fun main(args: Array<String>) {
-    io.ktor.server.netty.EngineMain.main(args)
-}
-
-fun Application.module() {
-    configureFrameworks()
-    configureSerialization()
-    configureDatabases()
-    configureSecurity()
-    configureHTTP()
-    configureRouting()
+fun main() {
+    val config = HoconApplicationConfig(ConfigFactory.load("application.conf"))
+    val port = config.property("ktor.deployment.port").getString().toInt()
+    val host = config.property("ktor.deployment.host").getString()
+    embeddedServer(Netty, port = port, host = host) {
+        configureDataBase()
+        configureBasic()
+        configureKoin()
+        configureRequestValidation()
+        configureAuth()
+        configureSwagger()
+        configureStatusPage()
+        configureRoute()
+    }.start(wait = true)
 }
