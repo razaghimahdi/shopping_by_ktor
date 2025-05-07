@@ -1,7 +1,7 @@
-package com.piashcse.plugins
+package com.shoppingbyktor.plugins
 
-import com.piashcse.modules.auth.controller.JwtController
-import com.piashcse.database.models.user.body.JwtTokenRequest
+import com.shoppingbyktor.modules.auth.controller.JwtController
+import com.shoppingbyktor.database.models.user.body.JwtTokenRequest
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -16,21 +16,12 @@ fun Application.configureAuth() {
         jwt (RoleManagement.CUSTOMER.role){
             provideJwtAuthConfig(this, RoleManagement.CUSTOMER)
         }
-        jwt(RoleManagement.ADMIN.role) {
-            provideJwtAuthConfig(this, RoleManagement.ADMIN)
-        }
-        jwt(RoleManagement.SELLER.role) {
-            provideJwtAuthConfig(this, RoleManagement.SELLER)
-        }
-        jwt(RoleManagement.SUPER_ADMIN.role) {
-            provideJwtAuthConfig(this, RoleManagement.SUPER_ADMIN)
-        }
     }
 }
 
 fun provideJwtAuthConfig(jwtConfig: JWTAuthenticationProvider.Config, userRole: RoleManagement) {
     jwtConfig.verifier(JwtController.verifier)
-    jwtConfig.realm = "piashcse"
+    jwtConfig.realm = "shoppingbyktor"
     jwtConfig.validate {
         val userId = it.payload.getClaim("userId").asString()
         val email = it.payload.getClaim("email").asString()
@@ -42,8 +33,5 @@ fun provideJwtAuthConfig(jwtConfig: JWTAuthenticationProvider.Config, userRole: 
 }
 
 enum class RoleManagement(val role: String) {
-    SUPER_ADMIN("super_admin"),
-    ADMIN("admin"),
-    SELLER("seller"),
     CUSTOMER("customer")
 }

@@ -1,4 +1,4 @@
-package com.piashcse.utils
+package com.shoppingbyktor.utils
 
 class UserNotExistException : Exception()
 class EmailNotExist : Exception()
