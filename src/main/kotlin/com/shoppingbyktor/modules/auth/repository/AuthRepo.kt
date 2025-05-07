@@ -1,11 +1,10 @@
-package com.piashcse.modules.auth.repository
+package com.shoppingbyktor.modules.auth.repository
 
-import com.piashcse.database.entities.ChangePassword
-import com.piashcse.database.entities.LoginResponse
-import com.piashcse.database.models.user.body.ForgetPasswordRequest
-import com.piashcse.database.models.user.body.LoginRequest
-import com.piashcse.database.models.user.body.RegisterRequest
-import com.piashcse.database.models.user.body.ResetRequest
+import com.shoppingbyktor.database.entities.ChangePassword
+import com.shoppingbyktor.database.models.user.body.ForgetPasswordRequest
+import com.shoppingbyktor.database.models.user.body.LoginRequest
+import com.shoppingbyktor.database.models.user.body.RegisterRequest
+import com.shoppingbyktor.database.models.user.body.ResetRequest
 
 interface AuthRepo {
     /**
@@ -14,7 +13,7 @@ interface AuthRepo {
      * @param request The registration details.
      * @return The registration response.
      */
-    suspend fun register(registerRequest: RegisterRequest): Any
+    suspend fun register(registerRequest: RegisterRequest): String?
 
     /**
      * Authenticates a user and returns a login response.
@@ -22,15 +21,7 @@ interface AuthRepo {
      * @param request The login credentials.
      * @return The login response.
      */
-    suspend fun login(loginRequest: LoginRequest): LoginResponse
-
-    /**
-     * Otp verification.
-     *
-     * @param request the otp code.
-     * @return The success response.
-     */
-    suspend fun otpVerification(userId: String,otp: String): Boolean
+    suspend fun login(loginRequest: LoginRequest): String?
 
     /**
      * Changes the password for a user.

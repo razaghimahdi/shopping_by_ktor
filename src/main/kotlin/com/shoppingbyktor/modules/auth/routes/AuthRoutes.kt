@@ -1,18 +1,19 @@
-package com.piashcse.modules.auth.routes
+package com.shoppingbyktor.modules.auth.routes
 
-import com.piashcse.modules.auth.controller.AuthController
-import com.piashcse.database.entities.ChangePassword
-import com.piashcse.database.models.user.body.ForgetPasswordRequest
-import com.piashcse.database.models.user.body.JwtTokenRequest
-import com.piashcse.database.models.user.body.LoginRequest
-import com.piashcse.database.models.user.body.RegisterRequest
-import com.piashcse.database.models.user.body.ResetRequest
-import com.piashcse.plugins.RoleManagement
-import com.piashcse.utils.ApiResponse
-import com.piashcse.utils.AppConstants
-import com.piashcse.utils.extension.apiResponse
-import com.piashcse.utils.extension.requiredParameters
-import com.piashcse.utils.sendEmail
+import com.shoppingbyktor.modules.auth.controller.AuthController
+import com.shoppingbyktor.database.entities.ChangePassword
+import com.shoppingbyktor.database.models.user.body.ForgetPasswordRequest
+import com.shoppingbyktor.database.models.user.body.JwtTokenRequest
+import com.shoppingbyktor.database.models.user.body.LoginRequest
+import com.shoppingbyktor.database.models.user.body.RegisterRequest
+import com.shoppingbyktor.database.models.user.body.ResetRequest
+import com.shoppingbyktor.plugins.RoleManagement
+import com.shoppingbyktor.utils.AlertResponse
+import com.shoppingbyktor.utils.ApiResponse
+import com.shoppingbyktor.utils.AppConstants
+import com.shoppingbyktor.utils.extension.apiResponse
+import com.shoppingbyktor.utils.extension.requiredParameters
+import com.shoppingbyktor.utils.sendEmail
 import io.github.smiley4.ktoropenapi.get
 import io.github.smiley4.ktoropenapi.post
 import io.github.smiley4.ktoropenapi.put
@@ -65,30 +66,6 @@ fun Route.authRoutes(authController: AuthController) {
             call.respond(ApiResponse.success(authController.register(requestBody), HttpStatusCode.OK))
         }
 
-        /**
-         * Handles the otp-verification request.
-         *
-         * Receives otp as a query parameter and verifies the opt.
-         */
-        get("otp-verification", {
-            tags("Auth")
-            request {
-                queryParameter<String>("userId") {
-                    required = true
-                }
-                queryParameter<String>("otp") {
-                    required = true
-                }
-            }
-            apiResponse()
-        }) {
-            val (userId, otp) = call.requiredParameters("userId", "otp") ?: return@get
-            call.respond(
-                ApiResponse.success(
-                    authController.otpVerification(userId, otp), HttpStatusCode.OK
-                )
-            )
-        }
 
         /**
          * Handles the request for sending a password reset verification code.
@@ -178,7 +155,7 @@ fun Route.authRoutes(authController: AuthController) {
          *
          * Requires the old and new password as query parameters and responds with a success or failure message.
          */
-        authenticate(RoleManagement.ADMIN.role, RoleManagement.SELLER.role, RoleManagement.CUSTOMER.role) {
+        authenticate( RoleManagement.CUSTOMER.role) {
             put("change-password", {
                 tags("Auth")
                 protected = true
@@ -201,7 +178,7 @@ fun Route.authRoutes(authController: AuthController) {
                         )
                     ) else call.respond(
                         ApiResponse.failure(
-                            "Old password is wrong", HttpStatusCode.OK
+                            AlertResponse("Old password is wrong"), HttpStatusCode.OK
                         )
                     )
                 }
