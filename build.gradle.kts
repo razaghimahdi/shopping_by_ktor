@@ -6,13 +6,13 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-group = "org.example"
+group = "com.shoppingbyktor"
 version = "0.0.1"
 
 application {
-    mainClass.set("ApplicationKt")
+    mainClass.set("com.shoppingbyktor.ApplicationKt")
     // adding this for fatjar
-    project.setProperty("mainClassName", "ApplicationKt")
+    project.setProperty("mainClassName", "com.shoppingbyktor.ApplicationKt")
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
@@ -64,4 +64,24 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.koin.core)
     implementation(libs.koin.logger)
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+tasks.withType<JavaCompile> {
+    sourceCompatibility = "21"
+    targetCompatibility = "21"
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+tasks.create("stage") {
+    dependsOn("installDist")
 }
