@@ -7,13 +7,9 @@ import com.shoppingbyktor.database.models.user.body.JwtTokenRequest
 import com.shoppingbyktor.database.models.user.body.LoginRequest
 import com.shoppingbyktor.database.models.user.body.RegisterRequest
 import com.shoppingbyktor.database.models.user.body.ResetRequest
-import com.shoppingbyktor.plugins.RoleManagement
-import com.shoppingbyktor.utils.AlertResponse
-import com.shoppingbyktor.utils.ApiResponse
-import com.shoppingbyktor.utils.AppConstants
+import com.shoppingbyktor.utils.*
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.requiredParameters
-import com.shoppingbyktor.utils.sendEmail
 import io.github.smiley4.ktoropenapi.get
 import io.github.smiley4.ktoropenapi.post
 import io.github.smiley4.ktoropenapi.put
@@ -155,8 +151,7 @@ fun Route.authRoutes(authController: AuthController) {
          *
          * Requires the old and new password as query parameters and responds with a success or failure message.
          */
-        authenticate( RoleManagement.CUSTOMER.role) {
-            put("change-password", {
+             put("change-password", {
                 tags("Auth")
                 protected = true
                 request {
@@ -178,11 +173,10 @@ fun Route.authRoutes(authController: AuthController) {
                         )
                     ) else call.respond(
                         ApiResponse.failure(
-                            AlertResponse("Old password is wrong"), HttpStatusCode.OK
+                            Response.Alert("Old password is wrong"), HttpStatusCode.OK
                         )
                     )
                 }
-            }
-        }
+         }
     }
 }

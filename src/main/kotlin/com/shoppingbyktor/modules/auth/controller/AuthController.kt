@@ -10,8 +10,10 @@ import com.shoppingbyktor.database.models.user.body.RegisterRequest
 import com.shoppingbyktor.database.models.user.body.ResetRequest
 import com.shoppingbyktor.modules.auth.repository.AuthRepo
 import com.shoppingbyktor.utils.CommonException
+import com.shoppingbyktor.utils.FillInputCorrect
 import com.shoppingbyktor.utils.PasswordNotMatch
 import com.shoppingbyktor.utils.UserNotExistException
+import com.shoppingbyktor.utils.extension.alreadyExistException
 import com.shoppingbyktor.utils.extension.notFoundException
 import com.shoppingbyktor.utils.extension.query
 
@@ -30,20 +32,22 @@ class AuthController : AuthRepo {
             UserDAO.Companion.find { (UserTable.email eq registerRequest.email) }
                 .toList().singleOrNull()
 
-        if (userEntity != null) {
-            // MainGenericResponse(result  = null, status =  true, AlertResponse("Failed", "User already exists with this email"))
-            null
-        } else {
-            // Create new user
-            val inserted = UserDAO.Companion.new {
-                email = registerRequest.email
-                name = registerRequest.name
-                password = BCrypt.withDefaults().hashToString(12, registerRequest.password.toCharArray())
+        when {
+            userEntity != null -> throw registerRequest.email.alreadyExistException()
+            registerRequest.email.isEmpty() || registerRequest.name.isEmpty() || registerRequest.password.isEmpty()->{
+                throw FillInputCorrect()
             }
-
-          //  MainGenericResponse(result  = inserted.loggedInWithToken().accessToken, status =  true, AlertResponse("Success", "User registered!"))
-            inserted.loggedInWithToken().accessToken
+            else -> {
+                // Create new user
+                val inserted = UserDAO.Companion.new {
+                    email = registerRequest.email
+                    name = registerRequest.name
+                    password = BCrypt.withDefaults().hashToString(12, registerRequest.password.toCharArray())
+                }
+                inserted.loggedInWithToken().accessToken
+            }
         }
+
     }
 
     /**
@@ -53,16 +57,15 @@ class AuthController : AuthRepo {
      * @param loginRequest The request containing login credentials.
      * @return The response containing the authentication token.
      */
-    override suspend fun login(loginRequest: LoginRequest):  String? = query {
+    override suspend fun login(loginRequest: LoginRequest): String? = query {
         val userEntity =
-            UserDAO.Companion.find { UserTable.email eq loginRequest.email }
-                .toList().singleOrNull()
+            UserDAO.Companion.find { UserTable.email eq loginRequest.email }.toList().singleOrNull()
+
         userEntity?.let {
             if (BCrypt.verifyer().verify(
                     loginRequest.password.toCharArray(), it.password
                 ).verified
             ) {
-               // MainGenericResponse(result  = it.loggedInWithToken().accessToken, status =  true, AlertResponse("Success", "Welcom Back!"))
                 it.loggedInWithToken().accessToken
             } else {
                 throw PasswordNotMatch()
