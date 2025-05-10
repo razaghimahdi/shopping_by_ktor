@@ -2,7 +2,7 @@ package com.shoppingbyktor.modules.review_rating.routes
 
 import com.shoppingbyktor.modules.review_rating.controller.ReviewRatingController
 import com.shoppingbyktor.database.models.ReviewRatingRequest
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.currentUser
@@ -54,7 +54,6 @@ fun Route.reviewRatingRoutes(reviewRatingController: ReviewRatingController) {
         }
 
         // Route for adding, updating, and deleting reviews and ratings
-        authenticate(RoleManagement.CUSTOMER.role) {
 
             // Route for posting a new review and rating
             /**
@@ -143,4 +142,3 @@ fun Route.reviewRatingRoutes(reviewRatingController: ReviewRatingController) {
             }
         }
     }
-}

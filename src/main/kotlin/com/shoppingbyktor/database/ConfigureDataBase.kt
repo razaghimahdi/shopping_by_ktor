@@ -62,12 +62,24 @@ private fun initDB() {
     Database.connect(dataSource)
 }
 
+//private fun runFlyway(datasource: DataSource) {
+//    val flyway = Flyway.configure()
+//        .dataSource(datasource)
+//        .baselineOnMigrate(true)
+//        .load()
+//    try {
+//        flyway.migrate()
+//    } catch (e: Exception) {
+//        throw e
+//    }
+//}
+
+
+
 private fun runFlyway(datasource: DataSource) {
-    val flyway = Flyway.configure()
-        .dataSource(datasource)
-        .baselineOnMigrate(true)
-        .load()
+    val flyway = Flyway.configure().dataSource(datasource).load()
     try {
+        flyway.info()
         flyway.migrate()
     } catch (e: Exception) {
         throw e

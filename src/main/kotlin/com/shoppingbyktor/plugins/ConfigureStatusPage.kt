@@ -15,9 +15,12 @@ fun Application.configureStatusPage() {
         exception<Throwable> { call, error ->
             when (error) {
                 is ConstraintViolationException -> {
+                    val errorMessage =
+                        error.constraintViolations.mapToMessage(baseName = "messages", locale = Locale.ENGLISH)
+                            .map { "${it.property}: ${it.message}" }.toString()
                     call.respond(
                         HttpStatusCode.BadRequest, ApiResponse.failure(
-                            AlertResponse(error.message), HttpStatusCode.BadRequest
+                            Response.Alert(errorMessage), HttpStatusCode.BadRequest
                         )
                     )
                 }
@@ -25,61 +28,67 @@ fun Application.configureStatusPage() {
                 is MissingRequestParameterException -> {
                     call.respond(
                         HttpStatusCode.BadRequest, ApiResponse.failure(
-                            AlertResponse(error.message), HttpStatusCode.BadRequest
+                            Response.Alert(error.message), HttpStatusCode.BadRequest
                         )
                     )
                 }
 
                 is EmailNotExist -> {
                     call.respond(
-                        HttpStatusCode.BadRequest, ApiResponse.failure(AlertResponse("User not exist"), HttpStatusCode.BadRequest)
+                        HttpStatusCode.BadRequest, ApiResponse.failure(Response.Alert("User not exist"), HttpStatusCode.BadRequest)
                     )
                 }
 
                 is NullPointerException -> {
                     call.respond(
                         ApiResponse.failure(
-                            AlertResponse("Null pointer error : ${error.message}"), HttpStatusCode.BadRequest
+                            Response.Alert("Null pointer error : ${error.message}"), HttpStatusCode.BadRequest
                         )
                     )
                 }
 
                 is UserNotExistException -> {
                     call.respond(
-                        HttpStatusCode.BadRequest, ApiResponse.failure(AlertResponse("User not exist"), HttpStatusCode.BadRequest)
+                        HttpStatusCode.BadRequest, ApiResponse.failure(Response.Alert("User not exist"), HttpStatusCode.BadRequest)
+                    )
+                }
+
+                is FillInputCorrect -> {
+                    call.respond(
+                        HttpStatusCode.BadRequest, ApiResponse.failure(Response.Alert("Fill inputs correct!","Warning"), HttpStatusCode.BadRequest)
                     )
                 }
 
                 is PasswordNotMatch -> {
                     call.respond(
                         HttpStatusCode.BadRequest,
-                        ApiResponse.failure(AlertResponse("Password is wrong"), HttpStatusCode.BadRequest)
+                        ApiResponse.failure(Response.Alert(title = "Failed", message = "Password is wrong"), HttpStatusCode.BadRequest)
                     )
                 }
 
                 is TypeCastException -> {
                     call.respond(
-                        ApiResponse.failure(AlertResponse("Type cast exception"), HttpStatusCode.BadRequest)
+                        ApiResponse.failure(Response.Alert("Type cast exception"), HttpStatusCode.BadRequest)
                     )
                 }
 
                 is CommonException -> {
                     call.respond(
-                        HttpStatusCode.BadRequest, ApiResponse.failure(AlertResponse(error.message), HttpStatusCode.BadRequest)
+                        HttpStatusCode.BadRequest, ApiResponse.failure(Response.Alert(error.message), HttpStatusCode.BadRequest)
                     )
                 }
 
                 else -> {
                     call.respond(
                         HttpStatusCode.InternalServerError, ApiResponse.failure(
-                            AlertResponse("Internal server error : ${error.message}"), HttpStatusCode.InternalServerError
+                            Response.Alert("Internal server error : ${error.message}"), HttpStatusCode.InternalServerError
                         )
                     )
                 }
             }
         }
         status(HttpStatusCode.Unauthorized) { call, statusCode ->
-            call.respond(HttpStatusCode.Unauthorized, ApiResponse.failure(AlertResponse("Unauthorized api call"), statusCode))
+            call.respond(HttpStatusCode.Unauthorized, ApiResponse.failure(Response.Alert("Unauthorized api call"), statusCode))
         }
     }
 }

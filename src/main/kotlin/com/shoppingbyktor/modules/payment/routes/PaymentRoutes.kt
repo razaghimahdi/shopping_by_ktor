@@ -2,7 +2,7 @@ package com.shoppingbyktor.modules.payment.routes
 
 import com.shoppingbyktor.modules.payment.controller.PaymentController
 import com.shoppingbyktor.database.models.PaymentRequest
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.requiredParameters
@@ -31,7 +31,6 @@ fun Route.paymentRoutes(paymentController: PaymentController) {
          *
          * @param paymentRequest The payment details (e.g., amount, payment method, etc.) to process the payment.
          */
-        authenticate(RoleManagement.CUSTOMER.role) {
             post({
                 tags("Payment")
                 summary = "auth[customer]"
@@ -72,6 +71,5 @@ fun Route.paymentRoutes(paymentController: PaymentController) {
                     )
                 )
             }
-        }
     }
 }

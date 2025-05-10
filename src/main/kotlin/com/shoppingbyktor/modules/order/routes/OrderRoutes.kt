@@ -4,7 +4,7 @@ package com.shoppingbyktor.modules.order.routes
 import com.shoppingbyktor.modules.order.controller.OrderController
 import com.shoppingbyktor.database.entities.OrderTable
 import com.shoppingbyktor.database.models.order.OrderRequest
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.currentUser
@@ -35,101 +35,99 @@ fun Route.orderRoutes(orderController: OrderController) {
          *
          * @param orderRequest The order details (product ID, quantity, etc.) to create the order.
          */
-        authenticate(RoleManagement.CUSTOMER.role) {
-            post({
-                tags("Order")
-                summary = "auth[customer]"
-                request {
-                    body<OrderRequest>()
-                }
-                apiResponse()
-            }) {
-                val requestBody = call.receive<OrderRequest>()
-                call.respond(
-                    ApiResponse.success(
-                        orderController.createOrder(call.currentUser().userId, requestBody), HttpStatusCode.OK
-                    )
-                )
+        post({
+            tags("Order")
+            summary = "auth[customer]"
+            request {
+                body<OrderRequest>()
             }
+            apiResponse()
+        }) {
+            val requestBody = call.receive<OrderRequest>()
+            call.respond(
+                ApiResponse.success(
+                    orderController.createOrder(call.currentUser().userId, requestBody), HttpStatusCode.OK
+                )
+            )
+        }
 
-            /**
-             * GET request to retrieve orders placed by the customer.
-             *
-             * Accessible by customers only.
-             *
-             * @param limit The maximum number of orders to retrieve.
-             */
-            get({
-                tags("Order")
-                summary = "auth[customer]"
-                request {
-                    queryParameter<String>("limit") {
-                        required = true
-                    }
+        /**
+         * GET request to retrieve orders placed by the customer.
+         *
+         * Accessible by customers only.
+         *
+         * @param limit The maximum number of orders to retrieve.
+         */
+        get({
+            tags("Order")
+            summary = "auth[customer]"
+            request {
+                queryParameter<String>("limit") {
+                    required = true
                 }
-                apiResponse()
-            }) {
-                val (limit) = call.requiredParameters("limit") ?: return@get
-                call.respond(
-                    ApiResponse.success(
-                        orderController.getOrders(
-                            call.currentUser().userId, limit.toInt()
-                        ), HttpStatusCode.OK
-                    )
-                )
             }
+            apiResponse()
+        }) {
+            val (limit) = call.requiredParameters("limit") ?: return@get
+            call.respond(
+                ApiResponse.success(
+                    orderController.getOrders(
+                        call.currentUser().userId, limit.toInt()
+                    ), HttpStatusCode.OK
+                )
+            )
+        }
 
-            /**
-             * PUT request to cancel an order.
-             *
-             * Accessible by customers only.
-             *
-             * @param id The order ID to cancel.
-             */
-            put("{id}/cancel", {
-                tags("Order")
-                summary = "auth[customer]"
-                request {
-                    pathParameter<String>("id") {
-                        required = true
-                    }
+        /**
+         * PUT request to cancel an order.
+         *
+         * Accessible by customers only.
+         *
+         * @param id The order ID to cancel.
+         */
+        put("{id}/cancel", {
+            tags("Order")
+            summary = "auth[customer]"
+            request {
+                pathParameter<String>("id") {
+                    required = true
                 }
-                apiResponse()
-            }) {
-                val (id) = call.requiredParameters("id") ?: return@put
-                call.respond(
-                    ApiResponse.success(
-                        orderController.updateOrderStatus(call.currentUser().userId, id, OrderTable.OrderStatus.CANCELED),
-                        HttpStatusCode.OK
-                    )
-                )
             }
+            apiResponse()
+        }) {
+            val (id) = call.requiredParameters("id") ?: return@put
+            call.respond(
+                ApiResponse.success(
+                    orderController.updateOrderStatus(call.currentUser().userId, id, OrderTable.OrderStatus.CANCELED),
+                    HttpStatusCode.OK
+                )
+            )
+        }
 
-            /**
-             * PUT request to mark an order as received.
-             *
-             * Accessible by customers only.
-             *
-             * @param id The order ID to mark as received.
-             */
-            put("{id}/receive", {
-                tags("Order")
-                summary = "auth[customer]"
-                request {
-                    pathParameter<String>("id") {
-                        required = true
-                    }
+        /**
+         * PUT request to mark an order as received.
+         *
+         * Accessible by customers only.
+         *
+         * @param id The order ID to mark as received.
+         */
+        put("{id}/receive", {
+            tags("Order")
+            summary = "auth[customer]"
+            request {
+                pathParameter<String>("id") {
+                    required = true
                 }
-                apiResponse()
-            }) {
-                val (id) = call.requiredParameters("id") ?: return@put
-                call.respond(
-                    ApiResponse.success(
-                        orderController.updateOrderStatus(call.currentUser().userId, id, OrderTable.OrderStatus.RECEIVED),
-                        HttpStatusCode.OK
-                    )
-                )
             }
+            apiResponse()
+        }) {
+            val (id) = call.requiredParameters("id") ?: return@put
+            call.respond(
+                ApiResponse.success(
+                    orderController.updateOrderStatus(call.currentUser().userId, id, OrderTable.OrderStatus.RECEIVED),
+                    HttpStatusCode.OK
+                )
+            )
         }
 
     }

@@ -1,7 +1,7 @@
 package com.shoppingbyktor.modules.brand.routes
 
 import com.shoppingbyktor.modules.brand.controller.BrandController
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.requiredParameters
@@ -26,8 +26,7 @@ fun Route.brandRoutes(brandController: BrandController) {
          *
          * @param limit The maximum number of brands to return.
          */
-        authenticate(RoleManagement.CUSTOMER.role) {
-            get({
+             get({
                 tags("Brand")
                 summary = "auth[admin, customer, seller]"
                 request {
@@ -43,8 +42,7 @@ fun Route.brandRoutes(brandController: BrandController) {
                         brandController.getBrands(limit.toInt()), HttpStatusCode.OK
                     )
                 )
-            }
-        }
+         }
 
     }
 }

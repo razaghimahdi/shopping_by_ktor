@@ -2,7 +2,7 @@ package com.shoppingbyktor.modules.profile.routes
 
 import com.shoppingbyktor.modules.profile.controller.ProfileController
 import com.shoppingbyktor.database.models.user.body.UserProfileRequest
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.AppConstants
 import com.shoppingbyktor.utils.extension.apiResponse
@@ -28,7 +28,6 @@ import java.util.*
  * @param userProfileController The controller responsible for handling user profile-related operations.
  */
 fun Route.profileRoutes(userProfileController: ProfileController) {
-    authenticate(RoleManagement.CUSTOMER.role) {
         route("profile") {
 
             /**
@@ -155,5 +154,4 @@ fun Route.profileRoutes(userProfileController: ProfileController) {
                 }
             }
         }
-    }
 }

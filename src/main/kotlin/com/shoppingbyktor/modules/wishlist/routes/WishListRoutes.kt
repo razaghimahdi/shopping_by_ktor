@@ -2,7 +2,7 @@ package com.shoppingbyktor.modules.wishlist.routes
 
 import com.shoppingbyktor.modules.wishlist.controller.WishListController
 import com.shoppingbyktor.database.models.WisListRequest
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.currentUser
@@ -23,7 +23,6 @@ import io.ktor.server.routing.*
  */
 fun Route.wishListRoutes(wishlistController: WishListController) {
     route("wishlist") {
-        authenticate(RoleManagement.CUSTOMER.role) {
 
             /**
              * POST request to add a product to the user's wish list.
@@ -97,5 +96,4 @@ fun Route.wishListRoutes(wishlistController: WishListController) {
                 )
             }
         }
-    }
 }

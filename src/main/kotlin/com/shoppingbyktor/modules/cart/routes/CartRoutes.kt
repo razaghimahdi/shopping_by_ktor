@@ -2,7 +2,7 @@ package com.shoppingbyktor.modules.cart.routes
 
 import com.shoppingbyktor.modules.cart.controller.CartController
 import com.shoppingbyktor.database.models.cart.CartRequest
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.currentUser
@@ -34,127 +34,125 @@ fun Route.cartRoutes(cartController: CartController) {
          * @param productId The ID of the product to add to the cart.
          * @param quantity The quantity of the product to add to the cart.
          */
-        authenticate(RoleManagement.CUSTOMER.role) {
-            post({
-                tags("Cart")
-                summary = "auth[customer]"
-                request {
-                    body<CartRequest>()
-                }
-                apiResponse()
-            }) {
-                val requestBody = call.receive<CartRequest>()
-                call.respond(
-                    ApiResponse.success(
-                        cartController.createCart(
-                            call.currentUser().userId,
-                            requestBody.productId,
-                            requestBody.quantity
-                        ), HttpStatusCode.OK
-                    )
-                )
+        post({
+            tags("Cart")
+            summary = "auth[customer]"
+            request {
+                body<CartRequest>()
             }
+            apiResponse()
+        }) {
+            val requestBody = call.receive<CartRequest>()
+            call.respond(
+                ApiResponse.success(
+                    cartController.createCart(
+                        call.currentUser().userId,
+                        requestBody.productId,
+                        requestBody.quantity
+                    ), HttpStatusCode.OK
+                )
+            )
+        }
 
-            /**
-             * GET request to retrieve items from the cart with a specified limit.
-             *
-             * Accessible by customers only.
-             *
-             * @param limit The maximum number of items to retrieve from the cart.
-             */
-            get({
-                tags("Cart")
-                summary = "auth[customer]"
-                request {
-                    queryParameter<Int>("limit") {
-                        required = true
-                    }
+        /**
+         * GET request to retrieve items from the cart with a specified limit.
+         *
+         * Accessible by customers only.
+         *
+         * @param limit The maximum number of items to retrieve from the cart.
+         */
+        get({
+            tags("Cart")
+            summary = "auth[customer]"
+            request {
+                queryParameter<Int>("limit") {
+                    required = true
                 }
-                apiResponse()
-            }) {
-                val (limit) = call.requiredParameters("limit") ?: return@get
-                call.respond(
-                    ApiResponse.success(
-                        cartController.getCartItems(
-                            call.currentUser().userId,
-                            limit.toInt()
-                        ), HttpStatusCode.OK
-                    )
-                )
             }
+            apiResponse()
+        }) {
+            val (limit) = call.requiredParameters("limit") ?: return@get
+            call.respond(
+                ApiResponse.success(
+                    cartController.getCartItems(
+                        call.currentUser().userId,
+                        limit.toInt()
+                    ), HttpStatusCode.OK
+                )
+            )
+        }
 
-            /**
-             * PUT request to update the quantity of a product in the cart.
-             *
-             * Accessible by customers only.
-             *
-             * @param productId The ID of the product to update in the cart.
-             * @param quantity The new quantity of the product.
-             */
-            put({
-                tags("Cart")
-                summary = "auth[customer]"
-                request {
-                    queryParameter<String>("productId") {
-                        required = true
-                    }
-                    queryParameter<String>("quantity") {
-                        required = true
-                    }
+        /**
+         * PUT request to update the quantity of a product in the cart.
+         *
+         * Accessible by customers only.
+         *
+         * @param productId The ID of the product to update in the cart.
+         * @param quantity The new quantity of the product.
+         */
+        put({
+            tags("Cart")
+            summary = "auth[customer]"
+            request {
+                queryParameter<String>("productId") {
+                    required = true
                 }
-                apiResponse()
-            }) {
-                val (productId, quantity) = call.requiredParameters("productId", "quantity") ?: return@put
-                call.respond(
-                    ApiResponse.success(
-                        cartController.updateCartQuantity(call.currentUser().userId, productId, quantity.toInt()),
-                        HttpStatusCode.OK
-                    )
-                )
-            }
-
-            /**
-             * DELETE request to remove a specific product from the cart.
-             *
-             * Accessible by customers only.
-             *
-             * @param productId The ID of the product to remove from the cart.
-             */
-            delete({
-                tags("Cart")
-                summary = "auth[customer]"
-                request {
-                    queryParameter<String>("productId") {
-                        required = true
-                    }
+                queryParameter<String>("quantity") {
+                    required = true
                 }
-                apiResponse()
-            }) {
-                val (productId) = call.requiredParameters("productId") ?: return@delete
-                call.respond(
-                    ApiResponse.success(
-                        cartController.removeCartItem(call.currentUser().userId, productId),
-                        HttpStatusCode.OK
-                    )
-                )
             }
+            apiResponse()
+        }) {
+            val (productId, quantity) = call.requiredParameters("productId", "quantity") ?: return@put
+            call.respond(
+                ApiResponse.success(
+                    cartController.updateCartQuantity(call.currentUser().userId, productId, quantity.toInt()),
+                    HttpStatusCode.OK
+                )
+            )
+        }
 
-            /**
-             * DELETE request to clear all items in the cart.
-             *
-             * Accessible by customers only.
-             */
-            delete("all", {
-                tags("Cart")
-                summary = "auth[customer]"
-                apiResponse()
-            }) {
-                call.respond(
-                    ApiResponse.success(
-                        cartController.clearCart(call.currentUser().userId), HttpStatusCode.OK
-                    )
-                )
+        /**
+         * DELETE request to remove a specific product from the cart.
+         *
+         * Accessible by customers only.
+         *
+         * @param productId The ID of the product to remove from the cart.
+         */
+        delete({
+            tags("Cart")
+            summary = "auth[customer]"
+            request {
+                queryParameter<String>("productId") {
+                    required = true
+                }
             }
+            apiResponse()
+        }) {
+            val (productId) = call.requiredParameters("productId") ?: return@delete
+            call.respond(
+                ApiResponse.success(
+                    cartController.removeCartItem(call.currentUser().userId, productId),
+                    HttpStatusCode.OK
+                )
+            )
+        }
+
+        /**
+         * DELETE request to clear all items in the cart.
+         *
+         * Accessible by customers only.
+         */
+        delete("all", {
+            tags("Cart")
+            summary = "auth[customer]"
+            apiResponse()
+        }) {
+            call.respond(
+                ApiResponse.success(
+                    cartController.clearCart(call.currentUser().userId), HttpStatusCode.OK
+                )
+            )
         }
     }
 }

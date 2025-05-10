@@ -3,7 +3,7 @@ package com.shoppingbyktor.modules.shipping.routes
 import com.shoppingbyktor.modules.shipping.controller.ShippingController
 import com.shoppingbyktor.database.models.shipping.ShippingRequest
 import com.shoppingbyktor.database.models.shipping.UpdateShipping
-import com.shoppingbyktor.plugins.RoleManagement
+
 import com.shoppingbyktor.utils.ApiResponse
 import com.shoppingbyktor.utils.extension.apiResponse
 import com.shoppingbyktor.utils.extension.currentUser
@@ -29,7 +29,6 @@ fun Route.shippingRoutes(shippingController: ShippingController) {
     route("/shipping") {
 
         // Routes for customers to add, retrieve, update, and delete shipping information
-        authenticate(RoleManagement.CUSTOMER.role) {
 
             /**
              * POST request to add shipping information for an order.
@@ -160,4 +159,3 @@ fun Route.shippingRoutes(shippingController: ShippingController) {
             }
         }
     }
-}
