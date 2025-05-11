@@ -1,22 +1,6 @@
 package com.shoppingbyktor.database
 
-import com.shoppingbyktor.database.entities.BrandTable
-import com.shoppingbyktor.database.entities.CartItemTable
-import com.shoppingbyktor.database.entities.OrderItemTable
-import com.shoppingbyktor.database.entities.OrderTable
-import com.shoppingbyktor.database.entities.PaymentTable
-import com.shoppingbyktor.database.entities.PolicyConsentTable
-import com.shoppingbyktor.database.entities.PolicyDocumentTable
-import com.shoppingbyktor.database.entities.ProductCategoryTable
-import com.shoppingbyktor.database.entities.ProductSubCategoryTable
-import com.shoppingbyktor.database.entities.ProductTable
-import com.shoppingbyktor.database.entities.ReviewRatingTable
-import com.shoppingbyktor.database.entities.ShippingTable
-import com.shoppingbyktor.database.entities.ShopCategoryTable
-import com.shoppingbyktor.database.entities.ShopTable
-import com.shoppingbyktor.database.entities.UserProfileTable
-import com.shoppingbyktor.database.entities.UserTable
-import com.shoppingbyktor.database.entities.WishListTable
+import com.shoppingbyktor.database.entities.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
@@ -49,9 +33,12 @@ fun configureDataBase() {
             ShippingTable,
             PaymentTable,
             PolicyDocumentTable,
-            PolicyConsentTable
+            PolicyConsentTable,
+            BannerTable
         )
     }
+
+    seedProducts()
 }
 
 private fun initDB() {
