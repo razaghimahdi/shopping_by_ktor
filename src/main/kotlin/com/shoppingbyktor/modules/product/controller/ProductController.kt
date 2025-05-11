@@ -25,11 +25,14 @@ import java.io.File
 class ProductController : ProductRepo {
 
     /**
-     * Initializes the product image folder if it does not exist.
+     * Initializes the product image and category image folder if it does not exist.
      */
     init {
         if (!File(AppConstants.ImageFolder.PRODUCT_IMAGE_LOCATION).exists()) {
             File(AppConstants.ImageFolder.PRODUCT_IMAGE_LOCATION).mkdirs()
+        }
+        if (!File(AppConstants.ImageFolder.CATEGORY_IMAGE_LOCATION).exists()) {
+            File(AppConstants.ImageFolder.CATEGORY_IMAGE_LOCATION).mkdirs()
         }
     }
 
@@ -42,7 +45,6 @@ class ProductController : ProductRepo {
      */
     override suspend fun createProduct(userId: String, productRequest: ProductRequest): Product = query {
         ProductDAO.Companion.new {
-            this.userId = EntityID(userId, ProductTable)
             categoryId = EntityID(productRequest.categoryId, ProductTable)
             subCategoryId = productRequest.subCategoryId?.let { EntityID(productRequest.subCategoryId, ProductTable) }
             brandId = productRequest.brandId?.let { EntityID(productRequest.brandId, ProductTable) }
@@ -70,10 +72,9 @@ class ProductController : ProductRepo {
     override suspend fun updateProduct(userId: String, productId: String, updateProduct: UpdateProduct): Product =
         query {
             val isProductExist =
-                ProductDAO.Companion.find { ProductTable.userId eq userId and (ProductTable.id eq productId) }.toList()
+                ProductDAO.Companion.find { (ProductTable.id eq productId) }.toList()
                     .singleOrNull()
             isProductExist?.apply {
-                this.userId = EntityID(userId, ProductTable)
                 categoryId =
                     updateProduct.categoryId?.let { EntityID(updateProduct.categoryId, ProductTable) } ?: categoryId
                 subCategoryId = updateProduct.subCategoryId?.let { EntityID(updateProduct.subCategoryId, ProductTable) }
@@ -136,7 +137,6 @@ class ProductController : ProductRepo {
      */
     override suspend fun getProductById(userId: String, productQuery: ProductWithFilterRequest): List<Product> = query {
         val query = ProductTable.selectAll()
-        query.andWhere { ProductTable.userId eq userId }
 
         productQuery.maxPrice?.let {
             query.andWhere { ProductTable.price lessEq it }
@@ -191,7 +191,7 @@ class ProductController : ProductRepo {
      */
     override suspend fun deleteProduct(userId: String, productId: String): String = query {
         val isProductExist =
-            ProductDAO.Companion.find { ProductTable.userId eq userId and (ProductTable.id eq productId) }.toList()
+            ProductDAO.Companion.find { (ProductTable.id eq productId) }.toList()
                 .singleOrNull()
         isProductExist?.let {
             it.delete()
