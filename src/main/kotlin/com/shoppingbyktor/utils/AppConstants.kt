@@ -29,5 +29,6 @@ object AppConstants {
     object ImageFolder {
         const val PROFILE_IMAGE_LOCATION = "src/main/resources/profile-image/"
         const val PRODUCT_IMAGE_LOCATION = "src/main/resources/product-image/"
+        const val CATEGORY_IMAGE_LOCATION = "src/main/resources/category-image/"
     }
 }
