@@ -8,6 +8,8 @@ import com.shoppingbyktor.modules.cart.routes.cartRoutes
 import com.shoppingbyktor.modules.cart.controller.CartController
 import com.shoppingbyktor.modules.consent.routes.consentRoutes
 import com.shoppingbyktor.modules.consent.controller.ConsentController
+import com.shoppingbyktor.modules.home.controller.HomeController
+import com.shoppingbyktor.modules.home.routes.homeRoutes
 import com.shoppingbyktor.modules.order.routes.orderRoutes
 import com.shoppingbyktor.modules.order.controller.OrderController
 import com.shoppingbyktor.modules.payment.routes.paymentRoutes
@@ -33,6 +35,7 @@ import com.shoppingbyktor.modules.shopcategory.controller.ShopCategoryController
 import com.shoppingbyktor.modules.wishlist.routes.wishListRoutes
 import com.shoppingbyktor.modules.wishlist.controller.WishListController
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
@@ -54,8 +57,11 @@ fun Application.configureRoute() {
     val paymentController: PaymentController by inject()
     val policyController: PolicyController by inject()
     val consentController: ConsentController by inject()
+    val homeController: HomeController by inject()
     routing {
 
+        staticResources("/product-image", "product-image")
+        staticResources("/category-image", "category-image")
 
         authRoutes(authController)
         profileRoutes(userProfileController)
@@ -73,5 +79,6 @@ fun Application.configureRoute() {
         paymentRoutes(paymentController)
         policyRoutes(policyController)
         consentRoutes(consentController)
+        homeRoutes(homeController)
     }
 }

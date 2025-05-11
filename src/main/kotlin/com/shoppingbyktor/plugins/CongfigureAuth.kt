@@ -9,6 +9,9 @@ import io.ktor.server.auth.jwt.*
 fun Application.configureAuth() {
     install(Authentication) {
 
+        jwt {
+            provideJwtAuthConfig(this)
+        }
     }
 }
 
@@ -18,7 +21,6 @@ fun provideJwtAuthConfig(jwtConfig: JWTAuthenticationProvider.Config) {
     jwtConfig.validate {
         val userId = it.payload.getClaim("userId").asString()
         val email = it.payload.getClaim("email").asString()
-        val userType = it.payload.getClaim("userType").asString()
-        JwtTokenRequest(userId, email, userType)
+        JwtTokenRequest(userId, email)
     }
 }
