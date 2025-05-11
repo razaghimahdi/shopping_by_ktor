@@ -4,6 +4,7 @@ import com.shoppingbyktor.modules.auth.controller.AuthController
 import com.shoppingbyktor.modules.brand.controller.BrandController
 import com.shoppingbyktor.modules.cart.controller.CartController
 import com.shoppingbyktor.modules.consent.controller.ConsentController
+import com.shoppingbyktor.modules.home.controller.HomeController
 import com.shoppingbyktor.modules.order.controller.OrderController
 import com.shoppingbyktor.modules.payment.controller.PaymentController
 import com.shoppingbyktor.modules.policy.controller.PolicyController
@@ -24,6 +25,7 @@ val controllerModule = module {
     single { OrderController() }
     single { OrderController() }
     single { ProductController() }
+    single { HomeController() }
     single { ProductCategoryController() }
     single { ProductSubCategoryController() }
     single { ShippingController() }
