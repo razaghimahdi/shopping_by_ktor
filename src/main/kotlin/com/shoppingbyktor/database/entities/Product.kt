@@ -6,7 +6,6 @@ import com.shoppingbyktor.database.entities.base.BaseIntIdTable
 import org.jetbrains.exposed.dao.id.EntityID
 
 object ProductTable : BaseIntIdTable("product") {
-    val userId = reference("user_id", UserTable.id)
     val name = text("name")
     val description = text("description")
     val categoryId = reference("category_id", ProductCategoryTable.id)
@@ -14,7 +13,9 @@ object ProductTable : BaseIntIdTable("product") {
     val brandId = reference("brand_id", BrandTable.id).nullable()
     val stockQuantity = integer("stock_quantity") // Number of products in stock
     val minOrderQuantity = integer("min_order_quantity").default(1) // Minimum quantity required for purchase
+    val soldCount = integer("sold_count").default(0) // number of sold
     val price = double("price")
+    val rate = double("rate")
     val discountPrice = double("discount_price").nullable()
     val videoLink = text("video_link").nullable()
     val hotDeal = bool("hot_deal").default(false) // Whether it's a hot deal or not
@@ -32,7 +33,6 @@ object ProductTable : BaseIntIdTable("product") {
 class ProductDAO(id: EntityID<String>) : BaseIntEntity(id, ProductTable) {
     companion object : BaseIntEntityClass<ProductDAO>(ProductTable)
 
-    var userId by ProductTable.userId
     var categoryId by ProductTable.categoryId
     var subCategoryId by ProductTable.subCategoryId
     var brandId by ProductTable.brandId
@@ -47,6 +47,8 @@ class ProductDAO(id: EntityID<String>) : BaseIntEntity(id, ProductTable) {
     var featured by ProductTable.featured
     var images by ProductTable.images
     var status by ProductTable.status
+    var rate by ProductTable.rate
+    var soldCount by ProductTable.soldCount
     fun response() = Product(
         id.value,
         categoryId.value,
@@ -62,7 +64,9 @@ class ProductDAO(id: EntityID<String>) : BaseIntEntity(id, ProductTable) {
         hotDeal,
         featured,
         images,
-        status
+        status,
+        rate,
+        soldCount,
     )
 }
 
@@ -81,5 +85,7 @@ data class Product(
     val hotDeal: Boolean?,
     val featured: Boolean,
     val images: String,
-    val status: ProductTable.ProductStatus
+    val status: ProductTable.ProductStatus,
+    val rate: Double,
+    val soldCount: Int,
 )

@@ -28,7 +28,7 @@ class UserDAO(id: EntityID<String>) : BaseIntEntity(id, UserTable) {
 
 
     fun loggedInWithToken() = LoginResponse(
-       JwtController.tokenProvider(JwtTokenRequest(id.value, email, name))
+       JwtController.tokenProvider(JwtTokenRequest(id.value, email))
     )
 }
 
