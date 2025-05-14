@@ -18,7 +18,16 @@ fun String.notFoundException(): CommonException {
     return CommonException("$this is not Exist")
 }
 
+fun Long.notFoundException(): CommonException {
+    return CommonException("$this is not Exist")
+}
+
 fun String.alreadyExistException(secondaryInfo: String = ""): CommonException {
+    return if (secondaryInfo.isEmpty()) CommonException("$this is already Exist")
+    else CommonException("$this $secondaryInfo is already Exist")
+}
+
+fun Long.alreadyExistException(secondaryInfo: String = ""): CommonException {
     return if (secondaryInfo.isEmpty()) CommonException("$this is already Exist")
     else CommonException("$this $secondaryInfo is already Exist")
 }
