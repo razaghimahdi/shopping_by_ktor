@@ -1,3 +1,3 @@
 package com.shoppingbyktor.database.models
 
-data class ReviewRatingRequest(val productId:String, val reviewText:String, val rating:Int)
+data class ReviewRatingRequest(val productId:Long, val reviewText:String, val rating:Int)

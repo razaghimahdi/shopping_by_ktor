@@ -8,9 +8,9 @@ import org.valiktor.validate
 data class ProductSearchRequest(
     val limit: Int,
     val name: String,
-    val maxPrice: Double?,
-    val minPrice: Double?,
-    val categoryId: String?,
+    val maxPrice: Long?,
+    val minPrice: Long?,
+    val categoryId: Long?,
 ) {
     fun validation() {
         validate(this) {

@@ -1,3 +1,3 @@
 package com.shoppingbyktor.database.models.user.response
 
-data class RegisterResponse(val id: String, val email: String, val message: String)
+data class RegisterResponse(val id: Long, val email: String, val message: String)

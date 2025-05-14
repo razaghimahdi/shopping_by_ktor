@@ -32,7 +32,7 @@ data class UpdatePolicyRequest(
  */
 @Serializable
 data class PolicyConsentRequest(
-    val policyId: String,
+    val policyId: Long,
     val ipAddress: String? = null,
     val userAgent: String? = null
 )

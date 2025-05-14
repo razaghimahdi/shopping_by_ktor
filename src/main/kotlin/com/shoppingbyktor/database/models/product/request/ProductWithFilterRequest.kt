@@ -6,11 +6,11 @@ import org.valiktor.validate
 
 data class ProductWithFilterRequest(
     val limit: Int,
-    val maxPrice: Double?,
-    val minPrice: Double?,
-    val categoryId: String?,
-    val subCategoryId: String?,
-    val brandId: String?,
+    val maxPrice: Long?,
+    val minPrice: Long?,
+    val categoryId: Long?,
+    val subCategoryId: Long?,
+    val brandId: Long?,
 ) {
     fun validation() {
         validate(this) {
