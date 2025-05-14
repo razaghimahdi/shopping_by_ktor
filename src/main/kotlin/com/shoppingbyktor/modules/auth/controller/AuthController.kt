@@ -82,7 +82,7 @@ class AuthController : AuthRepo {
      * @param changePassword The request containing the old and new passwords.
      * @return `true` if the password is changed successfully, otherwise `false`.
      */
-    override suspend fun changePassword(userId: String, changePassword: ChangePassword): Boolean = query {
+    override suspend fun changePassword(userId: Long, changePassword: ChangePassword): Boolean = query {
         val userEntity = UserDAO.Companion.find { UserTable.id eq userId }.toList().singleOrNull()
         userEntity?.let {
             if (BCrypt.verifyer().verify(changePassword.oldPassword.toCharArray(), it.password).verified) {

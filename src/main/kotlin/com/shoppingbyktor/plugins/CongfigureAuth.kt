@@ -19,7 +19,7 @@ fun provideJwtAuthConfig(jwtConfig: JWTAuthenticationProvider.Config) {
     jwtConfig.verifier(JwtController.verifier)
     jwtConfig.realm = "shoppingbyktor"
     jwtConfig.validate {
-        val userId = it.payload.getClaim("userId").asString()
+        val userId = it.payload.getClaim("userId").asLong()
         val email = it.payload.getClaim("email").asString()
         JwtTokenRequest(userId, email)
     }

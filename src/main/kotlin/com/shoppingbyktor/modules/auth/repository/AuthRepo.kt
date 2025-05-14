@@ -30,7 +30,7 @@ interface AuthRepo {
      * @param request The password change details.
      * @return `true` if the password change was successful, `false` otherwise.
      */
-    suspend fun changePassword(userId: String, changePassword: ChangePassword): Boolean
+    suspend fun changePassword(userId: Long, changePassword: ChangePassword): Boolean
 
     /**
      * Sends a verification code for password reset.
