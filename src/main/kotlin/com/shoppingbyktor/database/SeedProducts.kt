@@ -160,22 +160,22 @@ internal fun seedProducts() = transaction {
                         "Thanks to multi-point connection, the Bluetooth headphones can be paired with two devices at the same time. The Fast Pair function helps to search for headphones when they cannot be found. Swift pair supports pairing with a PC or tablet.\n" +
                         "With a battery life of up to 30 hours (when noise cancelling is on), you always have enough energy even on long journeys. These Sony headphones come with a folding case that makes storage and transport easier.\n" +
                         "Bluetooth specification version 5.2, effective range: 10 m.",
-                299.99,
+                299L,
                 listOf("${productBaseImageUrl}sony1.jpg","${productBaseImageUrl}sony2.jpg","${productBaseImageUrl}sony3.jpg","${productBaseImageUrl}sony4.jpg","${productBaseImageUrl}sony5.jpg",).toString(),
                 categories[0]
             ),
             Quintuple(
-                "Samsung Galaxy S23", "Flagship smartphone with AMOLED display and 128GB storage.", 899.99,
+                "Samsung Galaxy S23", "Flagship smartphone with AMOLED display and 128GB storage.", 899L,
                 listOf("${productBaseImageUrl}sumsuang1.jpg","${productBaseImageUrl}sumsuang2.jpg","${productBaseImageUrl}sumsuang3.jpg","${productBaseImageUrl}sumsuang4.jpg","${productBaseImageUrl}sumsuang5.jpg",).toString(),
                 categories[1]
             ),
             Quintuple(
-                "Nike Air Max", "Stylish and comfortable sneakers for everyday wear.", 129.99,
+                "Nike Air Max", "Stylish and comfortable sneakers for everyday wear.", 129L,
                 listOf("${productBaseImageUrl}nike1.jpg","${productBaseImageUrl}nike2.jpg","${productBaseImageUrl}nike3.jpg","${productBaseImageUrl}nike4.jpg","${productBaseImageUrl}nike5.jpg",).toString(),
                 categories[7]
             ),
             Quintuple(
-                "Adidas Running Shirt", "Breathable running shirt with sweat-wicking fabric.", 39.99,
+                "Adidas Running Shirt", "Breathable running shirt with sweat-wicking fabric.", 39L,
                 listOf("${productBaseImageUrl}adidas1.jpg","${productBaseImageUrl}adidas2.jpg","${productBaseImageUrl}adidas3.jpg","${productBaseImageUrl}adidas4.jpg","${productBaseImageUrl}adidas5.jpg",).toString(),
                 categories[6]
             ),
@@ -184,7 +184,7 @@ internal fun seedProducts() = transaction {
                         "Cute rainbow LED numbers: the rainbow numbers make it look cute and fun. The numbers are large and easy to see even from the other side of the room. It also has a variable dial display dimmer that allows you to dim the numbers off or very bright.\n" +
                         "Night light and radio with auto-off timer: Glow offers a 7-colour night light with on/off option (5 levels adjustable). Plus a radio for bedtime music to enjoy a soothing and pleasant bedtime before bedtime. You can also set the sleep timer to automatically turn off both the night light and FM radio.\n" +
                         "Double alarm with 3 alarm sounds: Glow provides a double alarm that can be set at the same time and wakes you up with 3 sounds - your favourite radio station, built-in beep or birds. The volume of the alarm is adjustable and increases slowly so as not to scare you.\n" +
-                        "Mains powered and battery backup: Glow is powered by the socket and can be secured with 3 x AAA batteries (battery is not included). It remains fully functional, the time is displayed and your alarm clock will still wake you up in the morning while it runs on batteries. Buy it and you will love it!", 19.99,
+                        "Mains powered and battery backup: Glow is powered by the socket and can be secured with 3 x AAA batteries (battery is not included). It remains fully functional, the time is displayed and your alarm clock will still wake you up in the morning while it runs on batteries. Buy it and you will love it!", 19L,
                 listOf("${productBaseImageUrl}clock1.jpg","${productBaseImageUrl}clock2.jpg","${productBaseImageUrl}clock3.jpg").toString(),
                 categories[1]
             ),
@@ -194,7 +194,7 @@ internal fun seedProducts() = transaction {
                         "Razer Focus Pro 30K Optical Sensor - Premium precision: The Razer sensor provides flawless tracking performance on a variety of surfaces, including glass - supported by intelligent features for improved aiming accuracy and control.\n" +
                         "Razer Optical Mouse Switches Gen-3 - No problems with double clicks, no debounce delay: From an improved 90 million click lifespan with no double-click problems to a lightning-fast 0.2 ms actuation without debounce delay, the mouse has the reliability and speed designed for esports.\n" +
                         "Razer HyperSpeed Wireless - Extremely responsive multi-device connectivity: Experience a pristine connection that remains smooth and stable even in noisy wireless environments - Equipped with multi-device support for optimized esports setup.\n" +
-                        "Up to 90 hours of battery life - no downtime when gaming: This wireless ergonomic esports mouse features a smaller, lighter battery with higher energy efficiency that allows up to 90 hours of continuous gaming and is rechargeable via USB Type C.", 59.99,
+                        "Up to 90 hours of battery life - no downtime when gaming: This wireless ergonomic esports mouse features a smaller, lighter battery with higher energy efficiency that allows up to 90 hours of continuous gaming and is rechargeable via USB Type C.", 59L,
                 listOf("${productBaseImageUrl}mouse1.jpg","${productBaseImageUrl}mouse2.jpg","${productBaseImageUrl}mouse3.jpg","${productBaseImageUrl}mouse4.jpg","${productBaseImageUrl}mouse5.jpg",).toString(),
                 categories[0]
             ),
@@ -203,12 +203,12 @@ internal fun seedProducts() = transaction {
         repeat(30) { i ->
             val (title, desc, basePrice, images, categoryId) = sampleProducts.random()
             val brand = brands.random()
-            val price = basePrice + (0..50).random()
+            val price = basePrice + (0..1000).random()
             val discount = if (i % 4 == 0) price * 0.85 else null
 
 
             ProductDAO.new {
-                name = title
+                this.title = title
                 description = desc
                 this.categoryId = categoryId.id
                 this.brandId = brand.id
@@ -222,7 +222,7 @@ internal fun seedProducts() = transaction {
                 this.videoLink = null
                 this.hotDeal = i % 5 == 0
                 this.featured = i % 6 == 0
-                this.images = images
+                this.gallery = images
                 this.status = ProductTable.ProductStatus.ACTIVE
             }
         }

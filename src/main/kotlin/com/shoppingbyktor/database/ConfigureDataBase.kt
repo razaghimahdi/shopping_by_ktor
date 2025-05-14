@@ -64,7 +64,10 @@ private fun initDB() {
 
 
 private fun runFlyway(datasource: DataSource) {
-    val flyway = Flyway.configure().dataSource(datasource).load()
+    val flyway = Flyway.configure()
+        .schemas("shopdev")
+        .defaultSchema("shopdev")
+        .dataSource(datasource).load()
     try {
         flyway.info()
         flyway.migrate()
