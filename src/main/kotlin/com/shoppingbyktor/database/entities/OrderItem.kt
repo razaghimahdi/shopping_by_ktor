@@ -12,7 +12,7 @@ object OrderItemTable : BaseIntIdTable("order_item") {
     val price = decimal("price", 10, 2) // Price of the product at the time of the order
 }
 
-class OrderItemDAO(id: EntityID<String>) : BaseIntEntity(id, OrderItemTable) {
+class OrderItemDAO(id: EntityID<Long>) : BaseIntEntity(id, OrderItemTable) {
     companion object : BaseIntEntityClass<OrderItemDAO>(OrderItemTable)
 
     var orderId by OrderItemTable.orderId

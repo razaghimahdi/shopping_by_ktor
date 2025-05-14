@@ -35,7 +35,7 @@ object PolicyDocumentTable : BaseIntIdTable("policy_documents") {
 /**
  * Data Access Object for policy documents
  */
-class PolicyDocumentDAO(id: EntityID<String>) : BaseIntEntity(id, PolicyDocumentTable) {
+class PolicyDocumentDAO(id: EntityID<Long>) : BaseIntEntity(id, PolicyDocumentTable) {
     companion object : BaseIntEntityClass<PolicyDocumentDAO>(PolicyDocumentTable)
 
     var title by PolicyDocumentTable.title
@@ -60,7 +60,7 @@ class PolicyDocumentDAO(id: EntityID<String>) : BaseIntEntity(id, PolicyDocument
  * Response model for policy documents
  */
 data class PolicyDocumentResponse(
-    val id: String,
+    val id: Long,
     val title: String,
     val type: String,
     val content: String,

@@ -11,7 +11,7 @@ object CartItemTable : BaseIntIdTable("cart_item") {
     val quantity = integer("quantity").default(1)
 }
 
-class CartItemDAO(id: EntityID<String>) : BaseIntEntity(id, CartItemTable) {
+class CartItemDAO(id: EntityID<Long>) : BaseIntEntity(id, CartItemTable) {
     companion object : BaseIntEntityClass<CartItemDAO>(CartItemTable)
 
     var userId by CartItemTable.userId
@@ -21,7 +21,7 @@ class CartItemDAO(id: EntityID<String>) : BaseIntEntity(id, CartItemTable) {
 }
 
 data class Cart(
-    val productId: String,
+    val productId: Long,
     val quantity: Int,
     val product: Product?
 )

@@ -23,7 +23,7 @@ object PolicyConsentTable : BaseIntIdTable("policy_consents") {
 /**
  * Data Access Object for user policy consents
  */
-class PolicyConsentDAO(id: EntityID<String>) : BaseIntEntity(id, PolicyConsentTable) {
+class PolicyConsentDAO(id: EntityID<Long>) : BaseIntEntity(id, PolicyConsentTable) {
     companion object : BaseIntEntityClass<PolicyConsentDAO>(PolicyConsentTable)
 
     var userId by PolicyConsentTable.userId
@@ -46,9 +46,9 @@ class PolicyConsentDAO(id: EntityID<String>) : BaseIntEntity(id, PolicyConsentTa
  * Response model for user policy consents
  */
 data class UserPolicyConsentResponse(
-    val id: String,
-    val userId: String,
-    val policyId: String,
+    val id: Long,
+    val userId: Long,
+    val policyId: Long,
     val consentDate: String,
     val ipAddress: String?,
     val userAgent: String?

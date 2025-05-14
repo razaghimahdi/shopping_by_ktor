@@ -16,7 +16,7 @@ object OrderTable : BaseIntIdTable("order") {
     }
 }
 
-class OrderDAO(id: EntityID<String>) : BaseIntEntity(id, OrderTable) {
+class OrderDAO(id: EntityID<Long>) : BaseIntEntity(id, OrderTable) {
     companion object : BaseIntEntityClass<OrderDAO>(OrderTable)
 
     var userId by OrderTable.userId
@@ -32,7 +32,7 @@ class OrderDAO(id: EntityID<String>) : BaseIntEntity(id, OrderTable) {
 }
 
 data class Order(
-    val orderId: String,
+    val orderId: Long,
     val subTotal: Float,
     val total: Float,
     val status: OrderTable.OrderStatus,

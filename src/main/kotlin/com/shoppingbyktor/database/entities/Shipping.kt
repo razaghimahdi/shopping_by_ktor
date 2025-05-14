@@ -21,7 +21,7 @@ object ShippingTable : BaseIntIdTable("shipping") {
     }
 }
 
-class ShippingDAO(id: EntityID<String>) : BaseIntEntity(id, ShippingTable) {
+class ShippingDAO(id: EntityID<Long>) : BaseIntEntity(id, ShippingTable) {
     companion object : BaseIntEntityClass<ShippingDAO>(ShippingTable)
 
     var orderId by ShippingTable.orderId
@@ -50,8 +50,8 @@ class ShippingDAO(id: EntityID<String>) : BaseIntEntity(id, ShippingTable) {
 }
 
 data class Shipping(
-    val id: String,
-    var orderId: String,
+    val id: Long,
+    var orderId: Long,
     var status: ShippingTable.ShippingStatus,
     var address: String,
     var city: String,

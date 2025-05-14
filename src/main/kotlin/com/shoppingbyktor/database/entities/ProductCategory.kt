@@ -10,7 +10,7 @@ object ProductCategoryTable : BaseIntIdTable("category") {
     val icon = text("icon").nullable()
 }
 
-class ProductCategoryDAO(id: EntityID<String>) : BaseIntEntity(id, ProductCategoryTable) {
+class ProductCategoryDAO(id: EntityID<Long>) : BaseIntEntity(id, ProductCategoryTable) {
     companion object : BaseIntEntityClass<ProductCategoryDAO>(ProductCategoryTable)
 
     var name by ProductCategoryTable.name
@@ -21,7 +21,7 @@ class ProductCategoryDAO(id: EntityID<String>) : BaseIntEntity(id, ProductCatego
 }
 
 data class ProductCategory(
-    val id: String,
+    val id: Long,
     val name: String,
     val subCategories: List<ProductSubCategory>,
     val icon: String?

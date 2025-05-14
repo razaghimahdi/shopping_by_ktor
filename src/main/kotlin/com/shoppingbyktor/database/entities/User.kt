@@ -19,7 +19,7 @@ object UserTable : BaseIntIdTable("user") {
     }
 }
 
-class UserDAO(id: EntityID<String>) : BaseIntEntity(id, UserTable) {
+class UserDAO(id: EntityID<Long>) : BaseIntEntity(id, UserTable) {
     companion object : BaseIntEntityClass<UserDAO>(UserTable)
 
     var email by UserTable.email
@@ -33,7 +33,7 @@ class UserDAO(id: EntityID<String>) : BaseIntEntity(id, UserTable) {
 }
 
 data class UserResponse(
-    val id: String,
+    val id: Long,
     val email: String,
     var name: String
 )

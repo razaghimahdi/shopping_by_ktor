@@ -12,7 +12,7 @@ object ReviewRatingTable : BaseIntIdTable("review_rating") {
     val rating = integer("rating").check { it.between(1, 5) }
 }
 
-class ReviewRatingDAO(id: EntityID<String>) : BaseIntEntity(id, ReviewRatingTable) {
+class ReviewRatingDAO(id: EntityID<Long>) : BaseIntEntity(id, ReviewRatingTable) {
     companion object : BaseIntEntityClass<ReviewRatingDAO>(ReviewRatingTable)
 
     var userId by ReviewRatingTable.userId
@@ -30,9 +30,9 @@ class ReviewRatingDAO(id: EntityID<String>) : BaseIntEntity(id, ReviewRatingTabl
 }
 
 data class ReviewRating(
-    val id: String,
-    val userId: String,
-    val productId: String,
+    val id: Long,
+    val userId: Long,
+    val productId: Long,
     val reviewText: String,
     val rating: Int
 )

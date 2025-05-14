@@ -18,7 +18,7 @@ object PaymentTable : BaseIntIdTable("payment") {
     }
 }
 
-class PaymentDAO(id: EntityID<String>) : BaseIntEntity(id, PaymentTable) {
+class PaymentDAO(id: EntityID<Long>) : BaseIntEntity(id, PaymentTable) {
     companion object : BaseIntEntityClass<PaymentDAO>(PaymentTable) // Reference the Payments table
 
     var paymentId by PaymentTable.id
@@ -38,8 +38,8 @@ class PaymentDAO(id: EntityID<String>) : BaseIntEntity(id, PaymentTable) {
 }
 
 data class Payment(
-    val id: String,
-    val orderId: String,
+    val id: Long,
+    val orderId: Long,
     val amount: Long,
     val status: PaymentTable.PaymentStatus,
     val paymentMethod: String,

@@ -22,7 +22,7 @@ object UserProfileTable : BaseIntIdTable("user_profile") {
     val gender = text("gender").nullable()
 }
 
-class UsersProfileDAO(id: EntityID<String>) : BaseIntEntity(id, UserProfileTable) {
+class UsersProfileDAO(id: EntityID<Long>) : BaseIntEntity(id, UserProfileTable) {
     companion object : BaseIntEntityClass<UsersProfileDAO>(UserProfileTable)
 
     var userId by UserProfileTable.userId
@@ -56,7 +56,7 @@ class UsersProfileDAO(id: EntityID<String>) : BaseIntEntity(id, UserProfileTable
 }
 
 data class UserProfile(
-    var userId: String,
+    var userId: Long,
     val image: String?,
     val firstName: String?,
     val lastName: String?,

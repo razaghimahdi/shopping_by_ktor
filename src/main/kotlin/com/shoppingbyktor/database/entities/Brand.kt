@@ -11,7 +11,7 @@ object BrandTable : BaseIntIdTable("brand") {
     val logo = text("logo").nullable()
 }
 
-class BrandDAO(id: EntityID<String>) : BaseIntEntity(id, BrandTable) {
+class BrandDAO(id: EntityID<Long>) : BaseIntEntity(id, BrandTable) {
     companion object : BaseIntEntityClass<BrandDAO>(BrandTable)
 
     var name by BrandTable.name
@@ -19,4 +19,4 @@ class BrandDAO(id: EntityID<String>) : BaseIntEntity(id, BrandTable) {
     fun response() = Brand(id.value, name, logo)
 }
 
-data class Brand(val id: String, val name: String, val logo: String?)
+data class Brand(val id: Long, val name: String, val logo: String?)

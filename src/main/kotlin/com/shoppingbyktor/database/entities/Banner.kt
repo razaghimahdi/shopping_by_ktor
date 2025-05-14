@@ -9,7 +9,7 @@ object BannerTable : BaseIntIdTable("banner") {
      val banner = text("banner")
 }
 
-class BannerDAO(id: EntityID<String>) : BaseIntEntity(id, BannerTable) {
+class BannerDAO(id: EntityID<Long>) : BaseIntEntity(id, BannerTable) {
     companion object : BaseIntEntityClass<BannerDAO>(BannerTable)
 
     var banner by BannerTable.banner
@@ -20,6 +20,6 @@ class BannerDAO(id: EntityID<String>) : BaseIntEntity(id, BannerTable) {
 }
 
 data class Banner(
-    val id: String,
+    val id: Long,
     val banner: String
 )

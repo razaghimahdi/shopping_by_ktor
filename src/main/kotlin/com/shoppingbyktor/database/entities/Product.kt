@@ -6,7 +6,7 @@ import com.shoppingbyktor.database.entities.base.BaseIntIdTable
 import org.jetbrains.exposed.dao.id.EntityID
 
 object ProductTable : BaseIntIdTable("product") {
-    val name = text("name")
+    val title = text("title")
     val description = text("description")
     val categoryId = reference("category_id", ProductCategoryTable.id)
     val subCategoryId = reference("sub_category_id", ProductSubCategoryTable.id).nullable()
@@ -14,13 +14,13 @@ object ProductTable : BaseIntIdTable("product") {
     val stockQuantity = integer("stock_quantity") // Number of products in stock
     val minOrderQuantity = integer("min_order_quantity").default(1) // Minimum quantity required for purchase
     val soldCount = integer("sold_count").default(0) // number of sold
-    val price = double("price")
+    val price = long("price")
     val rate = double("rate")
     val discountPrice = double("discount_price").nullable()
     val videoLink = text("video_link").nullable()
     val hotDeal = bool("hot_deal").default(false) // Whether it's a hot deal or not
     val featured = bool("featured").default(false) // Whether the product is featured or not
-    val images = varchar("images", 1000) // Comma-separated image URLs for the product
+    val gallery = varchar("gallery", 1000) // Comma-separated image URLs for the product
     val status = enumerationByName("status", 50, ProductStatus::class).default(ProductStatus.ACTIVE) // Product status
 
     enum class ProductStatus {
@@ -30,13 +30,13 @@ object ProductTable : BaseIntIdTable("product") {
 
 }
 
-class ProductDAO(id: EntityID<String>) : BaseIntEntity(id, ProductTable) {
+class ProductDAO(id: EntityID<Long>) : BaseIntEntity(id, ProductTable) {
     companion object : BaseIntEntityClass<ProductDAO>(ProductTable)
 
     var categoryId by ProductTable.categoryId
     var subCategoryId by ProductTable.subCategoryId
     var brandId by ProductTable.brandId
-    var name by ProductTable.name
+    var title by ProductTable.title
     var description by ProductTable.description
     var minOrderQuantity by ProductTable.minOrderQuantity
     var stockQuantity by ProductTable.stockQuantity
@@ -45,7 +45,9 @@ class ProductDAO(id: EntityID<String>) : BaseIntEntity(id, ProductTable) {
     var videoLink by ProductTable.videoLink
     var hotDeal by ProductTable.hotDeal
     var featured by ProductTable.featured
-    var images by ProductTable.images
+    var gallery by ProductTable.gallery
+    private val images = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
+    var image = images.firstOrNull() ?: ""
     var status by ProductTable.status
     var rate by ProductTable.rate
     var soldCount by ProductTable.soldCount
@@ -54,7 +56,7 @@ class ProductDAO(id: EntityID<String>) : BaseIntEntity(id, ProductTable) {
         categoryId.value,
         subCategoryId?.value,
         brandId?.value,
-        name,
+        title,
         description,
         minOrderQuantity,
         stockQuantity,
@@ -67,25 +69,27 @@ class ProductDAO(id: EntityID<String>) : BaseIntEntity(id, ProductTable) {
         status,
         rate,
         soldCount,
+        image
     )
 }
 
 data class Product(
-    val id: String,
-    val categoryId: String,
-    val subCategoryId: String?,
-    val brandId: String?,
-    val name: String,
+    val id: Long,
+    val categoryId: Long,
+    val subCategoryId: Long?,
+    val brandId: Long?,
+    val title: String,
     val description: String,
     val minOrderQuantity: Int,
     val stockQuantity: Int,
-    val price: Double,
+    val price: Long,
     val discountPrice: Double?,
     val videoLink: String?,
     val hotDeal: Boolean?,
     val featured: Boolean,
-    val images: String,
+    val gallery: List<String>,
     val status: ProductTable.ProductStatus,
     val rate: Double,
     val soldCount: Int,
+    val image: String
 )
