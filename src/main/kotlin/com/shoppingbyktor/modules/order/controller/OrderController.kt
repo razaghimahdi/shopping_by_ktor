@@ -27,7 +27,7 @@ class OrderController : OrderRepo {
      * @return The created order entity with associated order items.
      * @throws Exception if there is an issue during order creation or the product is no longer in the cart.
      */
-    override suspend fun createOrder(userId: String, orderRequest: OrderRequest): Order = query {
+    override suspend fun createOrder(userId: Long, orderRequest: OrderRequest): Order = query {
         val order = OrderDAO.Companion.new {
             this.userId = EntityID(userId, OrderTable)
             this.subTotal = orderRequest.subTotal
@@ -56,7 +56,7 @@ class OrderController : OrderRepo {
      * @param limit The maximum number of orders to retrieve.
      * @return A list of order entities for the user.
      */
-    override suspend fun getOrders(userId: String, limit: Int): List<Order> = query {
+    override suspend fun getOrders(userId: Long, limit: Int): List<Order> = query {
         OrderDAO.Companion.find { OrderTable.userId eq userId }.limit(limit).map {
             it.response()
         }
@@ -71,7 +71,7 @@ class OrderController : OrderRepo {
      * @return The updated order entity with the new status.
      * @throws Exception if the order does not exist for the given user.
      */
-    override suspend fun updateOrderStatus(userId: String, orderId: String, status: OrderTable.OrderStatus): Order =
+    override suspend fun updateOrderStatus(userId: Long, orderId: Long, status: OrderTable.OrderStatus): Order =
         query {
             val isOrderExist =
                 OrderDAO.Companion.find { OrderTable.userId eq userId and (OrderTable.id eq orderId) }.toList()

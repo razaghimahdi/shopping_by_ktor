@@ -24,7 +24,7 @@ class ReviewRatingController : ReviewRatingRepo {
      * @return A list of reviews and ratings for the specified product.
      */
     override suspend fun getReviewRating(
-        productId: String, limit: Int
+        productId: Long, limit: Int
     ): List<ReviewRating> = query {
         val isProductIdExist =
             ReviewRatingDAO.Companion.find { ReviewRatingTable.productId eq productId }
@@ -42,7 +42,7 @@ class ReviewRatingController : ReviewRatingRepo {
      * @return The added review and rating.
      * @throws alreadyExistException If the user has already reviewed the specified product.
      */
-    override suspend fun addReviewRating(userId: String, reviewRating: ReviewRatingRequest): ReviewRating = query {
+    override suspend fun addReviewRating(userId: Long, reviewRating: ReviewRatingRequest): ReviewRating = query {
         val isReviewRatingExist =
             ReviewRatingDAO.Companion.find { ReviewRatingTable.id eq userId and (ReviewRatingTable.productId eq reviewRating.productId) }
                 .singleOrNull()
@@ -66,7 +66,7 @@ class ReviewRatingController : ReviewRatingRepo {
      * @throws review.notFoundException() If the review ID does not exist.
      */
     override suspend fun updateReviewRating(
-        reviewId: String,
+        reviewId: Long,
         review: String,
         rating: Int
     ): ReviewRating = query {
@@ -88,13 +88,13 @@ class ReviewRatingController : ReviewRatingRepo {
      * @return The ID of the deleted review.
      * @throws reviewId.notFoundException() If the review ID does not exist.
      */
-    override suspend fun deleteReviewRating(reviewId: String): String = query {
+    override suspend fun deleteReviewRating(reviewId: Long): String = query {
         val isReviewRatingExist =
             ReviewRatingDAO.Companion.find { ReviewRatingTable.id eq reviewId }
                 .singleOrNull()
         isReviewRatingExist?.let {
             it.delete()
-            reviewId
+            reviewId.toString()
         } ?: throw reviewId.notFoundException()
     }
 }

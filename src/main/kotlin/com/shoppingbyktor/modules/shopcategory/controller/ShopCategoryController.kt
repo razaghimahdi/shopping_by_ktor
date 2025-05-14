@@ -51,7 +51,7 @@ class ShopCategoryController : ShopCategoryRepo {
      * @return The updated shop category.
      * @throws categoryId.notFoundException If the category with the specified ID is not found.
      */
-    override suspend fun updateCategory(categoryId: String, name: String): ShopCategory = query {
+    override suspend fun updateCategory(categoryId: Long, name: String): ShopCategory = query {
         val isShopCategoryExist =
             ShopCategoryDAO.Companion.find { ShopCategoryTable.id eq categoryId }.toList().singleOrNull()
         isShopCategoryExist?.let {
@@ -67,12 +67,12 @@ class ShopCategoryController : ShopCategoryRepo {
      * @return The ID of the deleted category.
      * @throws categoryId.notFoundException If the category with the specified ID is not found.
      */
-    override suspend fun deleteCategory(categoryId: String): String = query {
+    override suspend fun deleteCategory(categoryId: Long): String = query {
         val shopCategoryExist =
             ShopCategoryDAO.Companion.find { ShopCategoryTable.id eq categoryId }.toList().singleOrNull()
         shopCategoryExist?.let {
             it.delete()
-            categoryId
+            categoryId.toString()
         } ?: throw categoryId.notFoundException()
     }
 }

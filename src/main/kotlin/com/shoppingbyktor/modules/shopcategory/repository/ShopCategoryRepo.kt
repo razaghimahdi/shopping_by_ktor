@@ -26,7 +26,7 @@ interface ShopCategoryRepo {
      * @param categoryName The updated name of the shop category.
      * @return The updated shop category.
      */
-    suspend fun updateCategory(categoryId: String, categoryName: String): ShopCategory
+    suspend fun updateCategory(categoryId: Long, categoryName: String): ShopCategory
 
     /**
      * Deletes a specific shop category.
@@ -34,5 +34,5 @@ interface ShopCategoryRepo {
      * @param categoryId The unique identifier of the shop category to delete.
      * @return A confirmation message.
      */
-    suspend fun deleteCategory(categoryId: String): String
+    suspend fun deleteCategory(categoryId: Long): String
 }

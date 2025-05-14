@@ -24,7 +24,7 @@ class ShippingController : ShippingRepo {
      * @return The added shipping details.
      * @throws alreadyExistException If the shipping details for the specified order already exist.
      */
-    override suspend fun createShipping(userId: String, shippingRequest: ShippingRequest): Shipping = query {
+    override suspend fun createShipping(userId: Long, shippingRequest: ShippingRequest): Shipping = query {
         val isShippingExist = ShippingDAO.Companion.find {
             ShippingTable.orderId eq shippingRequest.orderId
         }.toList().singleOrNull()
@@ -50,7 +50,7 @@ class ShippingController : ShippingRepo {
      * @return The shipping details for the specified order.
      * @throws orderId.notFoundException If the shipping details for the specified order ID are not found.
      */
-    override suspend fun getShipping(userId: String, orderId: String): Shipping = query {
+    override suspend fun getShipping(userId: Long, orderId: Long): Shipping = query {
         val isShippingExist = ShippingDAO.Companion.find {
             ShippingTable.orderId eq orderId
         }.toList().singleOrNull()
@@ -65,7 +65,7 @@ class ShippingController : ShippingRepo {
      * @return The updated shipping details.
      * @throws alreadyExistException If the shipping ID does not exist for the specified user.
      */
-    override suspend fun updateShipping(userId: String, updateShipping: UpdateShipping): Shipping = query {
+    override suspend fun updateShipping(userId: Long, updateShipping: UpdateShipping): Shipping = query {
         val isShippingExist = ShippingDAO.Companion.find {
             ShippingTable.id eq updateShipping.id
         }.toList().singleOrNull()
@@ -91,13 +91,13 @@ class ShippingController : ShippingRepo {
      * @return The ID of the deleted shipping record.
      * @throws id.notFoundException If the shipping record with the specified ID does not exist.
      */
-    override suspend fun deleteShipping(userId: String, id: String): String = query {
+    override suspend fun deleteShipping(userId: Long, id: Long): String = query {
         val isShippingExist = ShippingDAO.Companion.find {
             ShippingTable.id eq id
         }.toList().singleOrNull()
         isShippingExist?.let {
             it.delete()
-            id
+            id.toString()
         } ?: throw id.notFoundException()
     }
 }

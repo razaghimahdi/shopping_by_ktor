@@ -98,7 +98,7 @@ fun Route.orderRoutes(orderController: OrderController) {
             val (id) = call.requiredParameters("id") ?: return@put
             call.respond(
                 ApiResponse.success(
-                    orderController.updateOrderStatus(call.currentUser().userId, id, OrderTable.OrderStatus.CANCELED),
+                    orderController.updateOrderStatus(call.currentUser().userId, id.toLong(), OrderTable.OrderStatus.CANCELED),
                     HttpStatusCode.OK
                 )
             )
@@ -124,7 +124,7 @@ fun Route.orderRoutes(orderController: OrderController) {
             val (id) = call.requiredParameters("id") ?: return@put
             call.respond(
                 ApiResponse.success(
-                    orderController.updateOrderStatus(call.currentUser().userId, id, OrderTable.OrderStatus.RECEIVED),
+                    orderController.updateOrderStatus(call.currentUser().userId, id.toLong(), OrderTable.OrderStatus.RECEIVED),
                     HttpStatusCode.OK
                 )
             )

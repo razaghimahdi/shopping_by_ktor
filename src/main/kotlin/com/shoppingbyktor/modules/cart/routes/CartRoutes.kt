@@ -106,7 +106,7 @@ fun Route.cartRoutes(cartController: CartController) {
             val (productId, quantity) = call.requiredParameters("productId", "quantity") ?: return@put
             call.respond(
                 ApiResponse.success(
-                    cartController.updateCartQuantity(call.currentUser().userId, productId, quantity.toInt()),
+                    cartController.updateCartQuantity(call.currentUser().userId, productId.toLong(), quantity.toInt()),
                     HttpStatusCode.OK
                 )
             )
@@ -132,7 +132,7 @@ fun Route.cartRoutes(cartController: CartController) {
             val (productId) = call.requiredParameters("productId") ?: return@delete
             call.respond(
                 ApiResponse.success(
-                    cartController.removeCartItem(call.currentUser().userId, productId),
+                    cartController.removeCartItem(call.currentUser().userId, productId.toLong()),
                     HttpStatusCode.OK
                 )
             )

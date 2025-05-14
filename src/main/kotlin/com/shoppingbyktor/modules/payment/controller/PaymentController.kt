@@ -43,7 +43,7 @@ class PaymentController : PaymentRepo {
      * @return The payment entity associated with the provided payment ID.
      * @throws Exception if no payment is found for the given payment ID.
      */
-    override suspend fun getPaymentById(paymentId: String): Payment = query {
+    override suspend fun getPaymentById(paymentId: Long): Payment = query {
         val isOrderExist = PaymentDAO.Companion.find { PaymentTable.id eq paymentId }.toList().firstOrNull()
         isOrderExist?.response() ?: throw paymentId.notFoundException()
     }

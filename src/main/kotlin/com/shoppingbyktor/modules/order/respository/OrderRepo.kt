@@ -12,7 +12,7 @@ interface OrderRepo{
      * @param request The order details.
      * @return The created order.
      */
-    suspend fun createOrder(userId: String, orderRequest: OrderRequest): Order
+    suspend fun createOrder(userId: Long, orderRequest: OrderRequest): Order
 
     /**
      * Retrieves a list of orders for a user.
@@ -21,7 +21,7 @@ interface OrderRepo{
      * @param limit The maximum number of orders to return.
      * @return A list of orders.
      */
-    suspend fun getOrders(userId: String, limit: Int): List<Order>
+    suspend fun getOrders(userId: Long, limit: Int): List<Order>
 
     /**
      * Updates the status of an order.
@@ -31,5 +31,5 @@ interface OrderRepo{
      * @param status The updated order status.
      * @return The updated order.
      */
-    suspend fun updateOrderStatus(userId: String, orderId: String, status: OrderTable.OrderStatus): Order
+    suspend fun updateOrderStatus(userId: Long, orderId: Long, status: OrderTable.OrderStatus): Order
 }

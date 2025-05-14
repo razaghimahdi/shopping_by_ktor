@@ -43,7 +43,7 @@ fun Route.productSubCategoryRoutes(subCategoryController: ProductSubCategoryCont
         val (categoryId, limit) = call.requiredParameters("categoryId", "limit") ?: return@get
         call.respond(
             ApiResponse.success(
-                subCategoryController.getProductSubCategory(categoryId, limit.toInt()), HttpStatusCode.OK
+                subCategoryController.getProductSubCategory(categoryId.toLong(), limit.toInt()), HttpStatusCode.OK
             )
         )
     }

@@ -14,7 +14,7 @@ interface PolicyRepo {
     /**
      * Updates an existing policy document
      */
-    suspend fun updatePolicy(id: String, updatePolicyRequest: UpdatePolicyRequest): PolicyDocumentResponse
+    suspend fun updatePolicy(id: Long, updatePolicyRequest: UpdatePolicyRequest): PolicyDocumentResponse
 
     /**
      * Gets a policy document by type, returning the latest active version
@@ -24,7 +24,7 @@ interface PolicyRepo {
     /**
      * Gets a policy document by ID
      */
-    suspend fun getPolicyById(id: String): PolicyDocumentResponse
+    suspend fun getPolicyById(id: Long): PolicyDocumentResponse
 
     /**
      * Gets all policy documents, optionally filtered by type
@@ -34,5 +34,5 @@ interface PolicyRepo {
     /**
      * Deactivates a policy document (doesn't delete, just marks as inactive)
      */
-    suspend fun deactivatePolicy(id: String): Boolean
+    suspend fun deactivatePolicy(id: Long): Boolean
 }

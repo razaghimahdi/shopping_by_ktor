@@ -67,7 +67,7 @@ fun Route.paymentRoutes(paymentController: PaymentController) {
                 val (id) = call.requiredParameters("id") ?: return@get
                 call.respond(
                     ApiResponse.success(
-                        paymentController.getPaymentById(id), HttpStatusCode.OK
+                        paymentController.getPaymentById(id.toLong()), HttpStatusCode.OK
                     )
                 )
             }

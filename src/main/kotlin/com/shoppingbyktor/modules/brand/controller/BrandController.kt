@@ -48,7 +48,7 @@ class BrandController : BrandRepo {
      * @return The updated brand entity.
      * @throws Exception if the brand ID is not found.
      */
-    override suspend fun updateBrand(brandId: String, name: String): Brand = query {
+    override suspend fun updateBrand(brandId: Long, name: String): Brand = query {
         val isBrandExist = BrandDAO.Companion.find { BrandTable.id eq brandId }.toList().singleOrNull()
         isBrandExist?.let {
             it.name = name
@@ -63,11 +63,11 @@ class BrandController : BrandRepo {
      * @return The ID of the deleted brand.
      * @throws Exception if the brand ID is not found.
      */
-    override suspend fun deleteBrand(brandId: String): String = query {
+    override suspend fun deleteBrand(brandId: Long): String = query {
         val isBrandExist = BrandDAO.Companion.find { BrandTable.id eq brandId }.toList().singleOrNull()
         isBrandExist?.let {
             it.delete()
-            brandId
+            brandId.toString()
         } ?: throw brandId.notFoundException()
     }
 }

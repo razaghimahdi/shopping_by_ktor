@@ -18,7 +18,7 @@ class ConsentController: ConsentRepo {
      * Records user consent to a policy
      */
     override suspend fun recordConsent(
-        currentUserId: String,
+        currentUserId: Long,
         consentRequest: PolicyConsentRequest
     ): UserPolicyConsentResponse = query {
         // Verify user and policy exist
@@ -54,7 +54,7 @@ class ConsentController: ConsentRepo {
     /**
      * Gets all consents for a user
      */
-    override suspend fun getUserConsents(userId: String): List<UserPolicyConsentResponse> = query {
+    override suspend fun getUserConsents(userId: Long): List<UserPolicyConsentResponse> = query {
         val user = UserDAO.Companion.findById(userId) ?: throw userId.notFoundException()
 
         PolicyConsentDAO.Companion.find { PolicyConsentTable.userId eq user.id }
@@ -64,7 +64,7 @@ class ConsentController: ConsentRepo {
     /**
      * Checks if a user has consented to a specific policy
      */
-    override suspend fun hasUserConsented(userId: String, policyType: PolicyDocumentTable.PolicyType): Boolean = query {
+    override suspend fun hasUserConsented(userId: Long, policyType: PolicyDocumentTable.PolicyType): Boolean = query {
         val user = UserDAO.Companion.findById(userId) ?: throw userId.notFoundException()
 
         // Find the active policy of the specified type

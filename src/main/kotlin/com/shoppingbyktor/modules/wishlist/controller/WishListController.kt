@@ -26,7 +26,7 @@ class WishListController : WishListRepo {
      * @return The product that was added to the wishlist.
      * @throws alreadyExistException If the product is already in the user's wishlist.
      */
-    override suspend fun addToWishList(userId: String, productId: String): WishList = query {
+    override suspend fun addToWishList(userId: Long, productId: Long): WishList = query {
         val isExits =
             WishListDAO.Companion.find { WishListTable.userId eq userId and (WishListTable.productId eq productId) }
                 .toList()
@@ -48,7 +48,7 @@ class WishListController : WishListRepo {
      * @param limit The maximum number of products to retrieve.
      * @return A list of products in the user's wishlist.
      */
-    override suspend fun getWishList(userId: String, limit: Int): List<Product> = query {
+    override suspend fun getWishList(userId: Long, limit: Int): List<Product> = query {
         WishListDAO.Companion.find { WishListTable.userId eq userId }.limit(limit).map {
             ProductDAO.Companion.find { ProductTable.id eq it.productId }.first().response()
         }
@@ -62,7 +62,7 @@ class WishListController : WishListRepo {
      * @return The product that was removed from the wishlist.
      * @throws notFoundException If the product is not found in the user's wishlist.
      */
-    override suspend fun removeFromWishList(userId: String, productId: String): Product = query {
+    override suspend fun removeFromWishList(userId: Long, productId: Long): Product = query {
         val isExits =
             WishListDAO.Companion.find { WishListTable.userId eq userId and (WishListTable.productId eq productId) }
                 .toList()

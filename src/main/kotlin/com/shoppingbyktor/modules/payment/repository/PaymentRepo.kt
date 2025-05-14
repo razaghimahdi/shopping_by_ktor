@@ -18,5 +18,5 @@ interface PaymentRepo {
      * @param paymentId The unique identifier of the payment.
      * @return The payment details.
      */
-    suspend fun getPaymentById(paymentId: String): Payment
+    suspend fun getPaymentById(paymentId: Long): Payment
 }

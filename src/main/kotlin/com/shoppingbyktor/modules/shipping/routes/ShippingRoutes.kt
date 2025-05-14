@@ -74,7 +74,7 @@ fun Route.shippingRoutes(shippingController: ShippingController) {
                 val (orderId) = call.requiredParameters("orderId") ?: return@get
                 call.respond(
                     ApiResponse.success(
-                        shippingController.getShipping(call.currentUser().userId, orderId),
+                        shippingController.getShipping(call.currentUser().userId, orderId.toLong()),
                         HttpStatusCode.OK
                     )
                 )
@@ -114,7 +114,7 @@ fun Route.shippingRoutes(shippingController: ShippingController) {
             }) {
                 val (id) = call.requiredParameters("id") ?: return@put
                 val params = UpdateShipping(
-                    id = id,
+                    id = id.toLong(),
                     address = call.parameters["shipAddress"],
                     city = call.parameters["shipCity"],
                     country = call.parameters["country"],
@@ -153,7 +153,7 @@ fun Route.shippingRoutes(shippingController: ShippingController) {
                 val (id) = call.requiredParameters("id") ?: return@delete
                 call.respond(
                     ApiResponse.success(
-                        shippingController.deleteShipping(call.currentUser().userId, id), HttpStatusCode.OK
+                        shippingController.deleteShipping(call.currentUser().userId, id.toLong()), HttpStatusCode.OK
                     )
                 )
             }

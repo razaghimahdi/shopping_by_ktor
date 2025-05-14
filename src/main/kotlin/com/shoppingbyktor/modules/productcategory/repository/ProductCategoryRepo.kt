@@ -17,7 +17,7 @@ interface ProductCategoryRepo {
      * @param limit The maximum number of categories to return.
      * @return A list of product categories.
      */
-    suspend fun getCategories(limit: Int): List<ProductCategory>
+    suspend fun getCategories(limit: Int?): List<ProductCategory>
 
     /**
      * Updates an existing product category.
@@ -26,7 +26,7 @@ interface ProductCategoryRepo {
      * @param name The updated category name.
      * @return The updated product category.
      */
-    suspend fun updateCategory(categoryId: String, name: String): ProductCategory
+    suspend fun updateCategory(categoryId: Long, name: String): ProductCategory
 
     /**
      * Deletes a product category.
@@ -34,5 +34,5 @@ interface ProductCategoryRepo {
      * @param categoryId The unique identifier of the category.
      * @return A confirmation message.
      */
-    suspend fun deleteCategory(categoryId: String): String
+    suspend fun deleteCategory(categoryId: Long): String
 }

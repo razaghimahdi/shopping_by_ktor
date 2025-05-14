@@ -53,7 +53,7 @@ class ProductSubCategoryController : ProductSubCategoryRepo {
      * @param limit The maximum number of subcategories to retrieve.
      * @return A list of product subcategories for the given category.
      */
-    override suspend fun getProductSubCategory(categoryId: String, limit: Int): List<ProductSubCategory> =
+    override suspend fun getProductSubCategory(categoryId: Long, limit: Int): List<ProductSubCategory> =
         query {
             val subCategoryExist =
                 ProductSubCategoryDAO.Companion.find { ProductSubCategoryTable.categoryId eq categoryId }
@@ -71,7 +71,7 @@ class ProductSubCategoryController : ProductSubCategoryRepo {
      * @return The updated product subcategory.
      * @throws id.notFoundException() If the subcategory ID does not exist.
      */
-    override suspend fun updateProductSubCategory(id: String, name: String): ProductSubCategory = query {
+    override suspend fun updateProductSubCategory(id: Long, name: String): ProductSubCategory = query {
         val suCategoryExist =
             ProductSubCategoryDAO.Companion.find { ProductSubCategoryTable.id eq id }
                 .toList().singleOrNull()
@@ -88,12 +88,12 @@ class ProductSubCategoryController : ProductSubCategoryRepo {
      * @return The ID of the deleted subcategory.
      * @throws subCategoryId.notFoundException() If the subcategory ID does not exist.
      */
-    override suspend fun deleteProductSubCategory(subCategoryId: String): String = query {
+    override suspend fun deleteProductSubCategory(subCategoryId: Long): String = query {
         val isSubCategoryExist =
             ProductSubCategoryDAO.Companion.find { ProductSubCategoryTable.id eq subCategoryId }.toList().singleOrNull()
         isSubCategoryExist?.let {
             isSubCategoryExist.delete()
-            subCategoryId
+            subCategoryId.toString()
         } ?: throw subCategoryId.notFoundException()
     }
 }

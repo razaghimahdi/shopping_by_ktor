@@ -91,7 +91,7 @@ fun Route.wishListRoutes(wishlistController: WishListController) {
                 val (productId) = call.requiredParameters("productId") ?: return@delete
                 call.respond(
                     ApiResponse.success(
-                        wishlistController.removeFromWishList(call.currentUser().userId, productId), HttpStatusCode.OK
+                        wishlistController.removeFromWishList(call.currentUser().userId, productId.toLong()), HttpStatusCode.OK
                     )
                 )
             }

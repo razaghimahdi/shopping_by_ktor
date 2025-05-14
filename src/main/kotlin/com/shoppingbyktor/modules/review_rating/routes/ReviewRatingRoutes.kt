@@ -47,7 +47,7 @@ fun Route.reviewRatingRoutes(reviewRatingController: ReviewRatingController) {
             val (productId, limit) = call.requiredParameters("productId", "limit") ?: return@get
             call.respond(
                 ApiResponse.success(
-                    reviewRatingController.getReviewRating(productId, limit.toInt()),
+                    reviewRatingController.getReviewRating(productId.toLong(), limit.toInt()),
                     HttpStatusCode.OK
                 )
             )
@@ -108,7 +108,7 @@ fun Route.reviewRatingRoutes(reviewRatingController: ReviewRatingController) {
                 call.respond(
                     ApiResponse.success(
                         reviewRatingController.updateReviewRating(
-                            id,
+                            id.toLong(),
                             review,
                             rating.toInt()
                         ), HttpStatusCode.OK
@@ -136,7 +136,7 @@ fun Route.reviewRatingRoutes(reviewRatingController: ReviewRatingController) {
                 val (id) = call.requiredParameters("id") ?: return@delete
                 call.respond(
                     ApiResponse.success(
-                        reviewRatingController.deleteReviewRating(id), HttpStatusCode.OK
+                        reviewRatingController.deleteReviewRating(id.toLong()), HttpStatusCode.OK
                     )
                 )
             }

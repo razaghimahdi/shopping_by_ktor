@@ -25,7 +25,7 @@ class ShopController : ShopRepo {
      * @return The created shop.
      * @throws alreadyExistException If a shop with the same name already exists.
      */
-    override suspend fun createShop(userId: String, categoryId: String, name: String): Shop = query {
+    override suspend fun createShop(userId: Long, categoryId: Long, name: String): Shop = query {
         val shopNameExist = ShopDAO.Companion.find { ShopTable.name eq name }.toList().singleOrNull()
         if (shopNameExist == null) {
             ShopDAO.Companion.new {
@@ -45,7 +45,7 @@ class ShopController : ShopRepo {
      * @param limit The maximum number of shops to retrieve.
      * @return A list of shops owned by the user.
      */
-    override suspend fun getShops(userId: String, limit: Int): List<Shop> = query {
+    override suspend fun getShops(userId: Long, limit: Int): List<Shop> = query {
         val isExist = ShopDAO.Companion.find { ShopTable.userId eq userId }.limit(limit).toList()
         isExist.map {
             it.shopResponse()
@@ -61,7 +61,7 @@ class ShopController : ShopRepo {
      * @return The updated shop.
      * @throws notFoundException If the shop with the specified ID is not found.
      */
-    override suspend fun updateShop(userId: String, shopId: String, name: String): Shop = query {
+    override suspend fun updateShop(userId: Long, shopId: Long, name: String): Shop = query {
         val shopNameExist =
             ShopDAO.Companion.find { ShopTable.userId eq userId and (ShopTable.id eq shopId) }.toList().singleOrNull()
         shopNameExist?.let {
@@ -78,12 +78,12 @@ class ShopController : ShopRepo {
      * @return The ID of the deleted shop.
      * @throws notFoundException If the shop with the specified ID is not found.
      */
-    override suspend fun deleteShop(userId: String, shopId: String): String = query {
+    override suspend fun deleteShop(userId: Long, shopId: Long): String = query {
         val shopNameExist =
             ShopDAO.Companion.find { ShopTable.userId eq userId and (ShopTable.id eq shopId) }.toList().singleOrNull()
         shopNameExist?.let {
             it.delete()
-            shopId
+            shopId.toString()
         } ?: throw shopId.notFoundException()
     }
 }

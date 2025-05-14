@@ -31,7 +31,7 @@ class ProfileController : ProfileRepo {
      * @return The user profile corresponding to the given user ID.
      * @throws userId.notFoundException() If no user profile is found for the given user ID.
      */
-    override suspend fun getProfile(userId: String): UserProfile = query {
+    override suspend fun getProfile(userId: Long): UserProfile = query {
         val isProfileExist =
             UsersProfileDAO.Companion.find { UserProfileTable.userId eq userId }.toList().singleOrNull()
         isProfileExist?.response() ?: throw userId.notFoundException()
@@ -45,7 +45,7 @@ class ProfileController : ProfileRepo {
      * @return The updated user profile.
      * @throws userId.notFoundException() If no user profile is found for the given user ID.
      */
-    override suspend fun updateProfile(userId: String, userProfile: UserProfileRequest?): UserProfile = query {
+    override suspend fun updateProfile(userId: Long, userProfile: UserProfileRequest?): UserProfile = query {
         val userProfileEntity =
             UsersProfileDAO.Companion.find { UserProfileTable.userId eq userId }.toList().singleOrNull()
         userProfileEntity?.let {
@@ -72,7 +72,7 @@ class ProfileController : ProfileRepo {
      * @return The updated user profile with the new image.
      * @throws userId.notFoundException() If no user profile is found for the given user ID.
      */
-    override suspend fun updateProfileImage(userId: String, profileImage: String?): UserProfile = query {
+    override suspend fun updateProfileImage(userId: Long, profileImage: String?): UserProfile = query {
         val userProfileEntity =
             UsersProfileDAO.Companion.find { UserProfileTable.userId eq userId }.toList().singleOrNull()
 

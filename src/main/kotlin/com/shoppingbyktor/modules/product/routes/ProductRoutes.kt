@@ -41,7 +41,7 @@ fun Route.productRoutes(productController: ProductController) {
             apiResponse()
         }) {
             val (productId) = call.requiredParameters("id") ?: return@get
-            call.respond(ApiResponse.success(productController.getProductDetail(productId), HttpStatusCode.OK))
+            call.respond(ApiResponse.success(productController.getProductDetail(productId.toLong()), HttpStatusCode.OK))
         }
 
         /**
@@ -73,11 +73,11 @@ fun Route.productRoutes(productController: ProductController) {
             val (limit) = call.requiredParameters("limit") ?: return@get
             val params = ProductWithFilterRequest(
                 limit = limit.toInt(),
-                maxPrice = call.parameters["maxPrice"]?.toDoubleOrNull(),
-                minPrice = call.parameters["minPrice"]?.toDoubleOrNull(),
-                categoryId = call.parameters["categoryId"],
-                subCategoryId = call.parameters["subCategoryId"],
-                brandId = call.parameters["brandId"]
+                maxPrice = call.parameters["maxPrice"]?.toLongOrNull(),
+                minPrice = call.parameters["minPrice"]?.toLongOrNull(),
+                categoryId = call.parameters["categoryId"]?.toLongOrNull(),
+                subCategoryId = call.parameters["subCategoryId"]?.toLongOrNull(),
+                brandId = call.parameters["brandId"]?.toLongOrNull()
             )
             call.respond(ApiResponse.success(productController.getProducts(params), HttpStatusCode.OK))
         }
@@ -112,9 +112,9 @@ fun Route.productRoutes(productController: ProductController) {
             val queryParams = ProductSearchRequest(
                 limit = limit.toInt(),
                 name = call.parameters["name"]!!,
-                maxPrice = call.parameters["maxPrice"]?.toDoubleOrNull(),
-                minPrice = call.parameters["minPrice"]?.toDoubleOrNull(),
-                categoryId = call.parameters["categoryId"]
+                maxPrice = call.parameters["maxPrice"]?.toLongOrNull(),
+                minPrice = call.parameters["minPrice"]?.toLongOrNull(),
+                categoryId = call.parameters["categoryId"]?.toLongOrNull()
             )
             call.respond(ApiResponse.success(productController.searchProduct(queryParams), HttpStatusCode.OK))
         }

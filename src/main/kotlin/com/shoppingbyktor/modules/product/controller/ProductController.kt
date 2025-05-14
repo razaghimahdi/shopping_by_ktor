@@ -43,12 +43,12 @@ class ProductController : ProductRepo {
      * @param productRequest The request object containing product details.
      * @return The created product entity.
      */
-    override suspend fun createProduct(userId: String, productRequest: ProductRequest): Product = query {
+    override suspend fun createProduct(userId: Long, productRequest: ProductRequest): Product = query {
         ProductDAO.Companion.new {
             categoryId = EntityID(productRequest.categoryId, ProductTable)
             subCategoryId = productRequest.subCategoryId?.let { EntityID(productRequest.subCategoryId, ProductTable) }
             brandId = productRequest.brandId?.let { EntityID(productRequest.brandId, ProductTable) }
-            name = productRequest.name
+            title = productRequest.title
             description = productRequest.description
             price = productRequest.price
             discountPrice = productRequest.discountPrice
@@ -56,7 +56,7 @@ class ProductController : ProductRepo {
             videoLink = productRequest.videoLink
             hotDeal = productRequest.hotDeal
             featured = productRequest.featured
-            images = productRequest.images.toString()
+            gallery = productRequest.gallery.toString()
         }.response()
     }
 
@@ -69,7 +69,7 @@ class ProductController : ProductRepo {
      * @return The updated product entity.
      * @throws Exception if the product with the provided ID is not found.
      */
-    override suspend fun updateProduct(userId: String, productId: String, updateProduct: UpdateProduct): Product =
+    override suspend fun updateProduct(userId: Long, productId: Long, updateProduct: UpdateProduct): Product =
         query {
             val isProductExist =
                 ProductDAO.Companion.find { (ProductTable.id eq productId) }.toList()
@@ -80,7 +80,7 @@ class ProductController : ProductRepo {
                 subCategoryId = updateProduct.subCategoryId?.let { EntityID(updateProduct.subCategoryId, ProductTable) }
                     ?: subCategoryId
                 brandId = updateProduct.brandId?.let { EntityID(updateProduct.brandId, ProductTable) } ?: brandId
-                name = updateProduct.name ?: name
+                title = updateProduct.title ?: title
                 description = updateProduct.description ?: description
                 price = updateProduct.price ?: price
                 discountPrice = updateProduct.discountPrice ?: discountPrice
@@ -88,7 +88,7 @@ class ProductController : ProductRepo {
                 videoLink = updateProduct.videoLink ?: videoLink
                 hotDeal = updateProduct.hotDeal ?: hotDeal
                 featured = updateProduct.featured ?: featured
-                images = if (updateProduct.images.isEmpty()) images else updateProduct.images.toString()
+                gallery = if (updateProduct.gallery.isEmpty()) gallery else updateProduct.gallery.toString()
             }?.response() ?: throw productId.notFoundException()
         }
 
@@ -135,7 +135,7 @@ class ProductController : ProductRepo {
      * @param productQuery The filter request containing product details.
      * @return A list of products matching the provided user and filter criteria.
      */
-    override suspend fun getProductById(userId: String, productQuery: ProductWithFilterRequest): List<Product> = query {
+    override suspend fun getProductById(userId: Long, productQuery: ProductWithFilterRequest): List<Product> = query {
         val query = ProductTable.selectAll()
 
         productQuery.maxPrice?.let {
@@ -176,7 +176,7 @@ class ProductController : ProductRepo {
      * @return The product entity with full details.
      * @throws Exception if the product with the provided ID is not found.
      */
-    override suspend fun getProductDetail(productId: String): Product = query {
+    override suspend fun getProductDetail(productId: Long): Product = query {
         val isProductExist = ProductDAO.Companion.find { ProductTable.id eq productId }.toList().singleOrNull()
         isProductExist?.response() ?: throw productId.notFoundException()
     }
@@ -189,13 +189,13 @@ class ProductController : ProductRepo {
      * @return The ID of the deleted product.
      * @throws Exception if the product with the provided ID is not found.
      */
-    override suspend fun deleteProduct(userId: String, productId: String): String = query {
+    override suspend fun deleteProduct(userId: Long, productId: Long): String = query {
         val isProductExist =
             ProductDAO.Companion.find { (ProductTable.id eq productId) }.toList()
                 .singleOrNull()
         isProductExist?.let {
             it.delete()
-            productId
+            productId.toString()
         } ?: throw productId.notFoundException()
     }
 
@@ -211,9 +211,9 @@ class ProductController : ProductRepo {
             val conditions = mutableListOf<Op<Boolean>>()
 
             if (productQuery.name.isNotEmpty()) {
-                conditions.add(ProductTable.name like "%$productQuery.productName%")
+                conditions.add(ProductTable.title like "%$productQuery.productName%")
             }
-            if (!productQuery.categoryId.isNullOrEmpty()) {
+            if (productQuery.categoryId != null) {
                 conditions.add(ProductTable.categoryId eq productQuery.categoryId)
             }
             if (productQuery.maxPrice != null) {

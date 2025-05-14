@@ -14,7 +14,7 @@ interface ProductRepo {
      * @param productRequest The details of the product to create.
      * @return The created product.
      */
-    suspend fun createProduct(userId: String, productRequest: ProductRequest): Product
+    suspend fun createProduct(userId: Long, productRequest: ProductRequest): Product
 
     /**
      * Updates an existing product.
@@ -24,7 +24,7 @@ interface ProductRepo {
      * @param update The product details to update.
      * @return The updated product.
      */
-    suspend fun updateProduct(userId: String, productId: String, updateProduct: UpdateProduct): Product
+    suspend fun updateProduct(userId: Long, productId: Long, updateProduct: UpdateProduct): Product
 
     /**
      * Retrieves a list of products based on filters.
@@ -41,7 +41,7 @@ interface ProductRepo {
      * @param query The filters to apply when retrieving the product.
      * @return A list of products (even if only one product matches).
      */
-    suspend fun getProductById(userId: String, productQuery: ProductWithFilterRequest): List<Product>
+    suspend fun getProductById(userId: Long, productQuery: ProductWithFilterRequest): List<Product>
 
     /**
      * Retrieves detailed information about a specific product.
@@ -49,7 +49,7 @@ interface ProductRepo {
      * @param productId The unique identifier of the product.
      * @return The product details.
      */
-    suspend fun getProductDetail(productId: String): Product
+    suspend fun getProductDetail(productId: Long): Product
 
     /**
      * Deletes a specific product.
@@ -58,7 +58,7 @@ interface ProductRepo {
      * @param productId The unique identifier of the product to delete.
      * @return A confirmation message.
      */
-    suspend fun deleteProduct(userId: String, productId: String): String
+    suspend fun deleteProduct(userId: Long, productId: Long): String
 
     /**
      * Searches for products based on query parameters.

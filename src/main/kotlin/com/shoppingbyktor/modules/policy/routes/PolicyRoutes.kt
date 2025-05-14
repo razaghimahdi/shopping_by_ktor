@@ -99,7 +99,7 @@ fun Route.policyRoutes(policyController: PolicyController) {
             apiResponse()
         }) {
             val (id) = call.requiredParameters("id") ?: return@get
-            call.respond(ApiResponse.success(policyController.getPolicyById(id), HttpStatusCode.OK))
+            call.respond(ApiResponse.success(policyController.getPolicyById(id.toLong()), HttpStatusCode.OK))
         }
 
     }

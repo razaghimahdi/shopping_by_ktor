@@ -24,12 +24,12 @@ interface BrandRepo {
      * @param name The updated name of the brand.
      * @return The updated brand.
      */
-    suspend fun updateBrand(brandId: String, name: String): Brand
+    suspend fun updateBrand(brandId: Long, name: String): Brand
     /**
      * Deletes a brand by its ID.
      *
      * @param brandId The unique identifier of the brand.
      * @return A confirmation message.
      */
-    suspend fun deleteBrand(brandId: String): String
+    suspend fun deleteBrand(brandId: Long): String
 }

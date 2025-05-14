@@ -11,7 +11,7 @@ interface ShopRepo {
      * @param name The name of the shop.
      * @return The created shop.
      */
-    suspend fun createShop(userId: String, categoryId: String, name: String): Shop
+    suspend fun createShop(userId: Long, categoryId: Long, name: String): Shop
 
     /**
      * Retrieves a list of shops with a limit.
@@ -20,7 +20,7 @@ interface ShopRepo {
      * @param limit The maximum number of shops to return.
      * @return A list of shops.
      */
-    suspend fun getShops(userId: String, limit: Int): List<Shop>
+    suspend fun getShops(userId: Long, limit: Int): List<Shop>
 
     /**
      * Updates an existing shop.
@@ -30,7 +30,7 @@ interface ShopRepo {
      * @param name The updated name of the shop.
      * @return The updated shop.
      */
-    suspend fun updateShop(userId: String, shopId: String, name: String): Shop
+    suspend fun updateShop(userId: Long, shopId: Long, name: String): Shop
 
     /**
      * Deletes a shop.
@@ -39,5 +39,5 @@ interface ShopRepo {
      * @param shopId The unique identifier of the shop to delete.
      * @return A confirmation message.
      */
-    suspend fun deleteShop(userId: String, shopId: String): String
+    suspend fun deleteShop(userId: Long, shopId: Long): String
 }

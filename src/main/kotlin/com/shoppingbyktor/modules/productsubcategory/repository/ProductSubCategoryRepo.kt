@@ -24,7 +24,7 @@ interface ProductSubCategoryRepo {
      * @param limit The maximum number of subcategories to retrieve.
      * @return A list of product subcategories.
      */
-    suspend fun getProductSubCategory(categoryId: String, limit: Int): List<ProductSubCategory>
+    suspend fun getProductSubCategory(categoryId: Long, limit: Int): List<ProductSubCategory>
 
     /**
      * Updates an existing product subcategory.
@@ -33,7 +33,7 @@ interface ProductSubCategoryRepo {
      * @param name The new name for the subcategory.
      * @return The updated product subcategory.
      */
-    suspend fun updateProductSubCategory(id: String, name: String): ProductSubCategory
+    suspend fun updateProductSubCategory(id: Long, name: String): ProductSubCategory
 
     /**
      * Deletes a product subcategory.
@@ -41,5 +41,5 @@ interface ProductSubCategoryRepo {
      * @param subCategoryId The ID of the subcategory to delete.
      * @return The ID of the deleted subcategory.
      */
-    suspend fun deleteProductSubCategory(subCategoryId: String): String
+    suspend fun deleteProductSubCategory(subCategoryId: Long): String
 }

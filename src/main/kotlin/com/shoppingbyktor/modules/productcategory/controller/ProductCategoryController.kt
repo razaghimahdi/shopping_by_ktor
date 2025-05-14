@@ -36,8 +36,9 @@ class ProductCategoryController : ProductCategoryRepo {
      * @param limit The maximum number of categories to retrieve.
      * @return A list of product category entities.
      */
-    override suspend fun getCategories(limit: Int): List<ProductCategory> = query {
-        val categories = ProductCategoryDAO.Companion.all().limit(limit)
+    override suspend fun getCategories(limit: Int?): List<ProductCategory> = query {
+        val categories =
+            if (limit != null) ProductCategoryDAO.Companion.all().limit(limit) else ProductCategoryDAO.Companion.all()
         categories.map {
             it.response()
         }
@@ -51,7 +52,7 @@ class ProductCategoryController : ProductCategoryRepo {
      * @return The updated product category entity.
      * @throws Exception if no category is found with the provided category ID.
      */
-    override suspend fun updateCategory(categoryId: String, name: String): ProductCategory = query {
+    override suspend fun updateCategory(categoryId: Long, name: String): ProductCategory = query {
         val isCategoryExist =
             ProductCategoryDAO.Companion.find { ProductCategoryTable.id eq categoryId }.toList().singleOrNull()
         isCategoryExist?.let {
@@ -67,12 +68,12 @@ class ProductCategoryController : ProductCategoryRepo {
      * @return The ID of the deleted category.
      * @throws Exception if no category is found with the provided category ID.
      */
-    override suspend fun deleteCategory(categoryId: String): String = query {
+    override suspend fun deleteCategory(categoryId: Long): String = query {
         val isCategoryExist =
             ProductCategoryDAO.Companion.find { ProductCategoryTable.id eq categoryId }.toList().singleOrNull()
         isCategoryExist?.let {
             isCategoryExist.delete()
-            categoryId
+            categoryId.toString()
         } ?: throw categoryId.notFoundException()
     }
 }
