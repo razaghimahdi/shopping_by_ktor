@@ -46,31 +46,34 @@ class ProductDAO(id: EntityID<Long>) : BaseIntEntity(id, ProductTable) {
     var hotDeal by ProductTable.hotDeal
     var featured by ProductTable.featured
     var gallery by ProductTable.gallery
-    private val images = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
-    var image = images.firstOrNull() ?: ""
+  //  private val images = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
+   // var image = images.firstOrNull() ?: ""
     var status by ProductTable.status
     var rate by ProductTable.rate
     var soldCount by ProductTable.soldCount
-    fun response() = Product(
-        id.value,
-        categoryId.value,
-        subCategoryId?.value,
-        brandId?.value,
-        title,
-        description,
-        minOrderQuantity,
-        stockQuantity,
-        price,
-        discountPrice,
-        videoLink,
-        hotDeal,
-        featured,
-        images,
-        status,
-        rate,
-        soldCount,
-        image
-    )
+    fun response() :Product {
+        val gallery = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
+       return Product(
+            id.value,
+            categoryId.value,
+            subCategoryId?.value,
+            brandId?.value,
+            title,
+            description,
+            minOrderQuantity,
+            stockQuantity,
+            price,
+            discountPrice,
+            videoLink,
+            hotDeal,
+            featured,
+            gallery,
+            status,
+            rate,
+            soldCount,
+            gallery.firstOrNull() ?: ""
+        )
+    }
 }
 
 data class Product(
