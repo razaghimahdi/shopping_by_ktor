@@ -26,6 +26,8 @@ import com.shoppingbyktor.modules.profile.routes.profileRoutes
 import com.shoppingbyktor.modules.profile.controller.ProfileController
 import com.shoppingbyktor.modules.review_rating.routes.reviewRatingRoutes
 import com.shoppingbyktor.modules.review_rating.controller.ReviewRatingController
+import com.shoppingbyktor.modules.search.controller.SearchController
+import com.shoppingbyktor.modules.search.routes.searchRoutes
 import com.shoppingbyktor.modules.shipping.routes.shippingRoutes
 import com.shoppingbyktor.modules.shipping.controller.ShippingController
 import com.shoppingbyktor.modules.shop.controller.ShopController
@@ -58,6 +60,7 @@ fun Application.configureRoute() {
     val policyController: PolicyController by inject()
     val consentController: ConsentController by inject()
     val homeController: HomeController by inject()
+    val searchController: SearchController by inject()
     routing {
 
         staticResources("/product-image", "product-image")
@@ -71,6 +74,7 @@ fun Application.configureRoute() {
         productCategoryRoutes(productCategoryController)
         productSubCategoryRoutes(productSubCategoryController)
         productRoutes(productController)
+        searchRoutes(searchController)
         reviewRatingRoutes(reviewRatingController)
         cartRoutes(cartController)
         wishListRoutes(wishListController)
