@@ -13,6 +13,7 @@ import com.shoppingbyktor.modules.productcategory.controller.ProductCategoryCont
 import com.shoppingbyktor.modules.productsubcategory.controller.ProductSubCategoryController
 import com.shoppingbyktor.modules.profile.controller.ProfileController
 import com.shoppingbyktor.modules.review_rating.controller.ReviewRatingController
+import com.shoppingbyktor.modules.search.controller.SearchController
 import com.shoppingbyktor.modules.shipping.controller.ShippingController
 import com.shoppingbyktor.modules.shop.controller.ShopController
 import com.shoppingbyktor.modules.shopcategory.controller.ShopCategoryController
@@ -25,6 +26,7 @@ val controllerModule = module {
     single { OrderController() }
     single { OrderController() }
     single { ProductController() }
+    single { SearchController() }
     single { HomeController() }
     single { ProductCategoryController() }
     single { ProductSubCategoryController() }
