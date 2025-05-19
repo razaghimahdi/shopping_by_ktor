@@ -82,42 +82,5 @@ fun Route.productRoutes(productController: ProductController) {
             call.respond(ApiResponse.success(productController.getProducts(params), HttpStatusCode.OK))
         }
 
-        /**
-         * GET request to search for products by name with optional filters.
-         *
-         * Accessible by customers, sellers, and admins.
-         *
-         * @param limit The number of products to retrieve.
-         * @param productName The name of the product to search.
-         * @param categoryId Optional category filter.
-         * @param maxPrice Optional maximum price filter.
-         * @param minPrice Optional minimum price filter.
-         */
-        get("search", {
-            tags("Product")
-            request {
-                queryParameter<Int>("limit") {
-                    required = true
-                }
-                queryParameter<String>("name") {
-                    required = true
-                }
-                queryParameter<String>("categoryId")
-                queryParameter<Double>("maxPrice")
-                queryParameter<Double>("minPrice")
-            }
-            apiResponse()
-        }) {
-            val (limit) = call.requiredParameters("limit") ?: return@get
-            val queryParams = ProductSearchRequest(
-                limit = limit.toInt(),
-                name = call.parameters["name"]!!,
-                maxPrice = call.parameters["maxPrice"]?.toLongOrNull(),
-                minPrice = call.parameters["minPrice"]?.toLongOrNull(),
-                categoryId = call.parameters["categoryId"]?.toLongOrNull()
-            )
-            call.respond(ApiResponse.success(productController.searchProduct(queryParams), HttpStatusCode.OK))
-        }
-
     }
 }

@@ -60,11 +60,4 @@ interface ProductRepo {
      */
     suspend fun deleteProduct(userId: Long, productId: Long): String
 
-    /**
-     * Searches for products based on query parameters.
-     *
-     * @param query The search parameters.
-     * @return A list of products matching the search.
-     */
-    suspend fun searchProduct(productQuery: ProductSearchRequest): List<Product>
 }

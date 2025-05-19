@@ -6,16 +6,17 @@ import org.valiktor.functions.isNotZero
 import org.valiktor.validate
 
 data class ProductSearchRequest(
-    val limit: Int,
-    val name: String,
-    val maxPrice: Long?,
+    val title: String?,
     val minPrice: Long?,
-    val categoryId: Long?,
+    val maxPrice: Long?,
+    val categoriesId: String?,
+    val page: Long?,
+    val sort: String?
 ) {
     fun validation() {
-        validate(this) {
-            validate(ProductSearchRequest::limit).isNotNull().isNotZero()
-            validate(ProductSearchRequest::name).isNotNull().isNotEmpty()
-        }
+       // validate(this) {
+           // validate(ProductSearchRequest::page).isNotNull().isNotZero() FIXME()
+           // validate(ProductSearchRequest::title).isNotNull().isNotEmpty() FIXME()
+        //}
     }
 }

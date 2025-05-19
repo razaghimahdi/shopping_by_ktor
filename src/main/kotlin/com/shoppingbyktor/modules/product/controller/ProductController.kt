@@ -198,33 +198,4 @@ class ProductController : ProductRepo {
             productId.toString()
         } ?: throw productId.notFoundException()
     }
-
-    /**
-     * Searches for products based on the given search criteria.
-     *
-     * @param productQuery The search request containing the parameters for searching products.
-     * @return A list of products matching the search criteria.
-     */
-    override suspend fun searchProduct(productQuery: ProductSearchRequest): List<Product> = query {
-        ProductDAO.Companion.find {
-            // Apply filters dynamically based on query parameters
-            val conditions = mutableListOf<Op<Boolean>>()
-
-            if (productQuery.name.isNotEmpty()) {
-                conditions.add(ProductTable.title like "%$productQuery.productName%")
-            }
-            if (productQuery.categoryId != null) {
-                conditions.add(ProductTable.categoryId eq productQuery.categoryId)
-            }
-            if (productQuery.maxPrice != null) {
-                conditions.add(ProductTable.price greaterEq productQuery.maxPrice)
-            }
-            if (productQuery.minPrice != null) {
-                conditions.add(ProductTable.price lessEq productQuery.minPrice)
-            }
-
-            // Combine all conditions with AND logic
-            if (conditions.isEmpty()) Op.TRUE else conditions.reduce { acc, op -> acc and op }
-        }.map { it.response() }
-    }
 }
