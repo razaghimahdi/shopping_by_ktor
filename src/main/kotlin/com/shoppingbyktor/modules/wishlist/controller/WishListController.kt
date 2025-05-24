@@ -11,6 +11,9 @@ import com.shoppingbyktor.utils.extension.alreadyExistException
 import com.shoppingbyktor.utils.extension.notFoundException
 import com.shoppingbyktor.utils.extension.query
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.and
 
 /**
@@ -19,26 +22,21 @@ import org.jetbrains.exposed.sql.and
 class WishListController : WishListRepo {
 
     /**
-     * Adds a product to the user's wishlist. If the product is already in the wishlist, an exception is thrown.
+     * Adds a product to the user's wishlist. If the product is already in the wishlist, then it will delete.
      *
      * @param userId The ID of the user who wants to add the product to their wishlist.
      * @param productId The ID of the product to be added to the wishlist.
-     * @return The product that was added to the wishlist.
-     * @throws alreadyExistException If the product is already in the user's wishlist.
      */
-    override suspend fun addToWishList(userId: Long, productId: Long): WishList = query {
+    override suspend fun addToWishList(userId: Long, productId: Long): Any? = query {
         val isExits =
             WishListDAO.Companion.find { WishListTable.userId eq userId and (WishListTable.productId eq productId) }
                 .toList()
                 .singleOrNull()
-        if (isExits == null) {
-            WishListDAO.Companion.new {
+        isExits?.delete()
+            ?: WishListDAO.Companion.new {
                 this.userId = EntityID(userId, WishListTable)
                 this.productId = EntityID(productId, WishListTable)
-            }.response(ProductDAO.Companion.find { ProductTable.id eq productId }.first().response())
-        } else {
-            throw productId.alreadyExistException()
-        }
+            }
     }
 
     /**
@@ -48,21 +46,40 @@ class WishListController : WishListRepo {
      * @param limit The maximum number of products to retrieve.
      * @return A list of products in the user's wishlist.
      */
-    override suspend fun getWishList(userId: Long, limit: Int): List<Product> = query {
-        WishListDAO.Companion.find { WishListTable.userId eq userId }.limit(limit).map {
-            ProductDAO.Companion.find { ProductTable.id eq it.productId }.first().response()
+    override suspend fun getWishList(
+        userId: Long,
+        categoryId: Long?,
+        perPage: Int,
+        page: Int
+    ): List<Product> = query {
+        val offset = (page - 1).coerceAtLeast(0) * perPage
+
+        val wishlistProductIds = WishListDAO.find { WishListTable.userId eq userId }
+            .map { it.productId.value }
+
+        val conditions = mutableListOf<Op<Boolean>>(
+            ProductTable.id inList wishlistProductIds
+        )
+
+        if (categoryId != null) {
+            conditions += (ProductTable.categoryId eq categoryId)
         }
+
+        ProductDAO.find(
+            conditions.reduce { acc, op -> acc and op }
+        )
+            .limit(perPage).offset(start = offset.toLong())
+            .map { it.response() }
     }
 
+
     /**
-     * Removes a product from the user's wishlist. If the product is not found in the wishlist, an exception is thrown.
+     * Removes a product from the user's wishlist. If the product is not found in the wishlist, then it will add.
      *
      * @param userId The ID of the user who wants to remove the product from their wishlist.
      * @param productId The ID of the product to be removed from the wishlist.
-     * @return The product that was removed from the wishlist.
-     * @throws notFoundException If the product is not found in the user's wishlist.
      */
-    override suspend fun removeFromWishList(userId: Long, productId: Long): Product = query {
+    override suspend fun removeFromWishList(userId: Long, productId: Long): Any? = query {
         val isExits =
             WishListDAO.Companion.find { WishListTable.userId eq userId and (WishListTable.productId eq productId) }
                 .toList()
@@ -71,7 +88,11 @@ class WishListController : WishListRepo {
             it.delete()
             ProductDAO.Companion.find { ProductTable.id eq it.productId }.first().response()
         } ?: run {
-            throw productId.notFoundException()
+            //  throw productId.notFoundException()
+            WishListDAO.Companion.new {
+                this.userId = EntityID(userId, WishListTable)
+                this.productId = EntityID(productId, WishListTable)
+            }
         }
     }
 }
