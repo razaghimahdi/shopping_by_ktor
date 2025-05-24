@@ -7,27 +7,26 @@ interface WishListRepo {
     /**
      * Adds a product to the user's wish list.
      *
-     * @param userId The unique identifier of the user.
      * @param productId The unique identifier of the product to add.
      * @return The updated wish list entry.
      */
-    suspend fun addToWishList(userId: Long, productId: Long): WishList
+    suspend fun addToWishList(userId: Long, productId: Long): Any?
 
     /**
      * Retrieves a list of products from the user's wish list.
      *
-     * @param userId The unique identifier of the user.
-     * @param limit The maximum number of products to return.
+     * @param categoryId filter base on category.
+     * @param perPage for paging.
+     * @param page for paging.
      * @return A list of products in the user's wish list.
      */
-    suspend fun getWishList(userId: Long, limit: Int): List<Product>
+    suspend fun getWishList(userId: Long, categoryId: Long?, perPage: Int, page: Int): List<Product>
 
     /**
      * Removes a product from the user's wish list.
      *
-     * @param userId The unique identifier of the user.
      * @param productId The unique identifier of the product to remove.
      * @return The removed product.
      */
-    suspend fun removeFromWishList(userId: Long, productId: Long): Product
+    suspend fun removeFromWishList(userId: Long, productId: Long): Any?
 }
