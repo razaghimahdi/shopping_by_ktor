@@ -10,6 +10,7 @@ import com.shoppingbyktor.modules.wishlist.repository.WishListRepo
 import com.shoppingbyktor.utils.extension.alreadyExistException
 import com.shoppingbyktor.utils.extension.notFoundException
 import com.shoppingbyktor.utils.extension.query
+import io.ktor.server.plugins.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -27,7 +28,12 @@ class WishListController : WishListRepo {
      * @param userId The ID of the user who wants to add the product to their wishlist.
      * @param productId The ID of the product to be added to the wishlist.
      */
-    override suspend fun addToWishList(userId: Long, productId: Long): Any? = query {
+    override suspend fun addToWishList(userId: Long, productId: Long?): Any? = query {
+        if (productId == null) throw NotFoundException("Product not found")
+        val isProductExist =
+            ProductDAO.Companion.find { ProductTable.id eq productId }.toList().singleOrNull()
+        if (isProductExist == null) throw NotFoundException("Product not found")
+
         val isExits =
             WishListDAO.Companion.find { WishListTable.userId eq userId and (WishListTable.productId eq productId) }
                 .toList()
@@ -37,6 +43,7 @@ class WishListController : WishListRepo {
                 this.userId = EntityID(userId, WishListTable)
                 this.productId = EntityID(productId, WishListTable)
             }
+        null
     }
 
     /**

@@ -10,7 +10,7 @@ interface WishListRepo {
      * @param productId The unique identifier of the product to add.
      * @return The updated wish list entry.
      */
-    suspend fun addToWishList(userId: Long, productId: Long): Any?
+    suspend fun addToWishList(userId: Long, productId: Long?): Any?
 
     /**
      * Retrieves a list of products from the user's wish list.

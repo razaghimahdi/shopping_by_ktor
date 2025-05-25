@@ -30,21 +30,22 @@ fun Route.wishListRoutes(wishlistController: WishListController) {
          * @param productId The ID of the product to add to the wish list.
          * @response A response indicating the success of adding the product to the wish list.
          */
-        post({
-            tags("Wish List")
-            summary = "auth[customer]"
-            request {
-                body<WisListRequest>()
-            }
-            apiResponse()
-        }) {
-            val requestBody = call.receive<WisListRequest>()
-            call.respond(
-                ApiResponse.success(
-                    wishlistController.addToWishList(call.currentUser().userId, requestBody.productId),
-                    HttpStatusCode.OK
+        authenticate("jwt") {
+            post("{id}/like", {
+                tags("Wish List")
+                summary = "auth[customer]"
+                apiResponse()
+            }) {
+
+                val requestBody = WisListRequest(call.parameters["id"]?.toLong())
+
+                call.respond(
+                    ApiResponse.success(
+                        wishlistController.addToWishList(call.currentUser().userId, requestBody.productId),
+                        HttpStatusCode.OK
+                    )
                 )
-            )
+            }
         }
 
         /**
@@ -53,31 +54,32 @@ fun Route.wishListRoutes(wishlistController: WishListController) {
          * @param limit The maximum number of products to retrieve from the wish list.
          * @response A response containing the products in the user's wish list.
          */
-        get("wishlist", {
-            tags("Wish List")
-            summary = "auth[customer]"
-            request {
-                queryParameter<Long>("category_id")
-                queryParameter<Int>("per_page")
-                queryParameter<Int>("page")
-            }
-            apiResponse()
-        }) {
-            val categoryId = call.parameters["category_id"]?.toLongOrNull()
-            val (page, perPage) = call.requiredParameters("page", "per_page") ?: return@get
-            val userId = call.currentUser().userId
-
-            call.respond(
-                ApiResponse.success(
-                    wishlistController.getWishList(
-                        userId = userId,
-                        categoryId = categoryId,
-                        page = page.toInt(),
-                        perPage = perPage.toInt()
-                    ),
-                    HttpStatusCode.OK
+        authenticate("jwt") {
+            get("wishlist", {
+                tags("Wish List")
+                summary = "auth[customer]"
+                request {
+                    queryParameter<Long>("category_id")
+                    queryParameter<Int>("per_page")
+                    queryParameter<Int>("page")
+                }
+                apiResponse()
+            }) {
+                val categoryId = call.parameters["category_id"]?.toLongOrNull()
+                val (page, perPage) = call.requiredParameters("page", "per_page") ?: return@get
+                val userId = call.currentUser().userId
+                call.respond(
+                    ApiResponse.success(
+                        wishlistController.getWishList(
+                            userId = userId,
+                            categoryId = categoryId,
+                            page = page.toInt(),
+                            perPage = perPage.toInt()
+                        ),
+                        HttpStatusCode.OK
+                    )
                 )
-            )
+            }
         }
 
         /**
@@ -86,23 +88,25 @@ fun Route.wishListRoutes(wishlistController: WishListController) {
          * @param productId The ID of the product to remove from the wish list.
          * @response A response indicating the success of removing the product from the wish list.
          */
-        delete({
-            tags("Wish List")
-            summary = "auth[customer]"
-            request {
-                queryParameter<String>("productId") {
-                    required = true
+        authenticate("jwt") {
+            delete({
+                tags("Wish List")
+                summary = "auth[customer]"
+                request {
+                    queryParameter<String>("productId") {
+                        required = true
+                    }
                 }
-            }
-            apiResponse()
-        }) {
-            val (productId) = call.requiredParameters("productId") ?: return@delete
-            call.respond(
-                ApiResponse.success(
-                    wishlistController.removeFromWishList(call.currentUser().userId, productId.toLong()),
-                    HttpStatusCode.OK
+                apiResponse()
+            }) {
+                val (productId) = call.requiredParameters("productId") ?: return@delete
+                call.respond(
+                    ApiResponse.success(
+                        wishlistController.removeFromWishList(call.currentUser().userId, productId.toLong()),
+                        HttpStatusCode.OK
+                    )
                 )
-            )
+            }
         }
     }
 }
