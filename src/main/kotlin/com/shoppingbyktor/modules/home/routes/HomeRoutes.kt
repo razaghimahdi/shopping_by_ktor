@@ -21,18 +21,18 @@ import io.ktor.server.routing.*
  */
 fun Route.homeRoutes(homeController: HomeController) {
     // Main route for product management
-    authenticate() {
-    route("home") {
+    authenticate("jwt") {
+        route("home") {
 
-        /**
-         * GET request to retrieve home details.
-         */
-        get({
-            tags("home screen")
-            apiResponse()
-        }) {
-            call.respond(ApiResponse.success(homeController.home(), HttpStatusCode.OK))
+            /**
+             * GET request to retrieve home details.
+             */
+            get({
+                tags("home screen")
+                apiResponse()
+            }) {
+                call.respond(ApiResponse.success(homeController.home(), HttpStatusCode.OK))
+            }
         }
-    }
     }
 }
