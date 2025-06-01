@@ -27,29 +27,31 @@ class CartController : CartRepo {
      * @return The created cart item entity.
      * @throws Exception if the product already exists in the user's cart.
      */
-    override suspend fun createCart(userId: Long, productId: Long, quantity: Int): Cart = query {
+    override suspend fun createCart(userId: Long, productId: Long, quantity: Int): Any? = query {
         val isProductExist =
             CartItemDAO.Companion.find { CartItemTable.userId eq userId and (CartItemTable.productId eq productId) }
                 .toList().singleOrNull()
         isProductExist?.let {
-            throw productId.alreadyExistException()
+            it.quantity = it.quantity + quantity
+            ProductDAO.Companion.find { ProductTable.id eq it.productId }.first()
         } ?: CartItemDAO.Companion.new {
             this.userId = EntityID(userId, CartItemTable)
             this.productId = EntityID(productId, CartItemTable)
             this.quantity = quantity
-        }.response()
+        }
+
+        return@query null
     }
 
     /**
      * Retrieves a list of cart items for a user, with a specified limit.
      *
      * @param userId The ID of the user for whom to retrieve cart items.
-     * @param limit The maximum number of cart items to retrieve.
      * @return A list of cart item entities with associated product details.
      */
-    override suspend fun getCartItems(userId: Long, limit: Int): List<Cart> = query {
-        CartItemDAO.Companion.find { CartItemTable.userId eq userId }.limit(limit).map {
-            it.response(ProductDAO.Companion.find { ProductTable.id eq it.productId }.first().response())
+    override suspend fun getCartItems(userId: Long): List<Product> = query {
+        CartItemDAO.Companion.find { CartItemTable.userId eq userId }.map {
+            ProductDAO.Companion.find { ProductTable.id eq it.productId }.first().response(it.quantity)
         }
     }
 
@@ -80,14 +82,16 @@ class CartController : CartRepo {
      * @return The product entity that was removed from the cart.
      * @throws Exception if the product does not exist in the user's cart.
      */
-    override suspend fun removeCartItem(userId: Long, productId: Long): Product = query {
+    override suspend fun removeCartItem(userId: Long, productId: Long):  Any? = query {
         val isProductExist =
             CartItemDAO.Companion.find { CartItemTable.userId eq userId and (CartItemTable.productId eq productId) }
                 .toList().singleOrNull()
         isProductExist?.let {
             it.delete()
-            ProductDAO.Companion.find { ProductTable.id eq it.productId }.first().response()
+            ProductDAO.Companion.find { ProductTable.id eq it.productId }.first()
         } ?: throw productId.notFoundException()
+
+        return@query null
     }
 
     /**
