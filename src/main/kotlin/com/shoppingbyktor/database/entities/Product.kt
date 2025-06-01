@@ -46,14 +46,15 @@ class ProductDAO(id: EntityID<Long>) : BaseIntEntity(id, ProductTable) {
     var hotDeal by ProductTable.hotDeal
     var featured by ProductTable.featured
     var gallery by ProductTable.gallery
-  //  private val images = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
-   // var image = images.firstOrNull() ?: ""
+
+    //  private val images = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
+    // var image = images.firstOrNull() ?: ""
     var status by ProductTable.status
     var rate by ProductTable.rate
     var soldCount by ProductTable.soldCount
-    fun response() :Product {
+    fun response(): Product {
         val gallery = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
-       return Product(
+        return Product(
             id.value,
             categoryId.value,
             subCategoryId?.value,
@@ -71,7 +72,32 @@ class ProductDAO(id: EntityID<Long>) : BaseIntEntity(id, ProductTable) {
             status,
             rate,
             soldCount,
-            gallery.firstOrNull() ?: ""
+            gallery.firstOrNull() ?: "",
+            0
+        )
+    }
+    fun response(count: Int): Product {
+        val gallery = gallery.removePrefix("[").removeSuffix("]").split(",").map { it.trim() }
+        return Product(
+            id.value,
+            categoryId.value,
+            subCategoryId?.value,
+            brandId?.value,
+            title,
+            description,
+            minOrderQuantity,
+            stockQuantity,
+            price,
+            discountPrice,
+            videoLink,
+            hotDeal,
+            featured,
+            gallery,
+            status,
+            rate,
+            soldCount,
+            gallery.firstOrNull() ?: "",
+            count
         )
     }
 }
@@ -94,5 +120,6 @@ data class Product(
     val status: ProductTable.ProductStatus,
     val rate: Double,
     val soldCount: Int,
-    val image: String
+    val image: String,
+    val count: Int,
 )
