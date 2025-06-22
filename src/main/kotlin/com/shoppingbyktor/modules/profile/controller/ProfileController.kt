@@ -49,17 +49,8 @@ class ProfileController : ProfileRepo {
         val userProfileEntity =
             UsersProfileDAO.Companion.find { UserProfileTable.userId eq userId }.toList().singleOrNull()
         userProfileEntity?.let {
-            it.firstName = userProfile?.firstName ?: it.firstName
-            it.lastName = userProfile?.lastName ?: it.lastName
-            it.mobile = userProfile?.mobile ?: it.mobile
-            it.faxNumber = userProfile?.faxNumber ?: it.faxNumber
-            it.streetAddress = userProfile?.streetAddress ?: it.streetAddress
-            it.city = userProfile?.city ?: it.city
-            it.identificationType = userProfile?.identificationType ?: it.identificationType
-            it.identificationNo = userProfile?.identificationNo ?: it.identificationNo
-            it.occupation = userProfile?.occupation ?: it.occupation
-            it.postCode = userProfile?.postCode ?: it.postCode
-            it.gender = userProfile?.gender ?: it.gender
+            it.name = userProfile?.name ?: it.name
+            it.age = userProfile?.age ?: it.age
             it.response()
         } ?: throw userId.notFoundException()
     }
@@ -69,21 +60,32 @@ class ProfileController : ProfileRepo {
      *
      * @param userId The ID of the user whose profile image is to be updated.
      * @param profileImage The new profile image file name.
-     * @return The updated user profile with the new image.
+     * @param name The new profile name. Can be null if no name is provided.
+     * @param age The new profile age. Can be null if no age is provided.
+     * @return The status.
      * @throws userId.notFoundException() If no user profile is found for the given user ID.
      */
-    override suspend fun updateProfileImage(userId: Long, profileImage: String?): UserProfile = query {
-        val userProfileEntity =
-            UsersProfileDAO.Companion.find { UserProfileTable.userId eq userId }.toList().singleOrNull()
+    override suspend fun updateProfileImage(userId: Long, imageFileName: String?, name: String?, age: Int?): Boolean = query {
+        val userProfileEntity = UsersProfileDAO.find { UserProfileTable.userId eq userId }.singleOrNull()
+            ?: throw userId.notFoundException()
 
-        // Delete previous profile image if it exists, as the new one will replace it.
-        userProfileEntity?.image?.let {
+        // Delete old image if needed
+        userProfileEntity.image?.let {
             Files.deleteIfExists(Paths.get("${AppConstants.ImageFolder.PROFILE_IMAGE_LOCATION}$it"))
         }
 
-        userProfileEntity?.let {
-            it.image = profileImage ?: it.image
-            it.response()
-        } ?: throw userId.notFoundException()
+        if (imageFileName != null) {
+            userProfileEntity.image = imageFileName
+        }
+        if (name != null) {
+            userProfileEntity.name = name
+        }
+        if (age != null) {
+            userProfileEntity.age = age
+        }
+        userProfileEntity.response()
+
+        true
     }
+
 }
