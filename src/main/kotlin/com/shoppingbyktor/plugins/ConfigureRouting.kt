@@ -1,5 +1,7 @@
 package com.shoppingbyktor.plugins
 
+import com.shoppingbyktor.modules.address.controller.AddressController
+import com.shoppingbyktor.modules.address.routes.addressRoutes
 import com.shoppingbyktor.modules.auth.routes.authRoutes
 import com.shoppingbyktor.modules.auth.controller.AuthController
 import com.shoppingbyktor.modules.brand.routes.brandRoutes
@@ -53,6 +55,7 @@ fun Application.configureRoute() {
     val productController: ProductController by inject()
     val reviewRatingController: ReviewRatingController by inject()
     val cartController: CartController by inject()
+    val addressController: AddressController by inject()
     val wishListController: WishListController by inject()
     val shippingController: ShippingController by inject()
     val orderController: OrderController by inject()
@@ -77,6 +80,7 @@ fun Application.configureRoute() {
         searchRoutes(searchController)
         reviewRatingRoutes(reviewRatingController)
         cartRoutes(cartController)
+        addressRoutes(addressController)
         wishListRoutes(wishListController)
         shippingRoutes(shippingController)
         orderRoutes(orderController)
