@@ -26,7 +26,9 @@ interface ProfileRepo {
      *
      * @param userId The unique identifier of the user.
      * @param imageUrl The new profile image URL. Can be null if no image is provided.
-     * @return The updated user profile.
+     * @param name The new profile name. Can be null if no name is provided.
+     * @param age The new profile age. Can be null if no age is provided.
+     * @return The status.
      */
-    suspend fun updateProfileImage(userId: Long, imageUrl: String?): UserProfile
+    suspend fun updateProfileImage(userId: Long, imageUrl: String?, name: String?, age: Int?): Boolean
 }
