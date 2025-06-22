@@ -2,6 +2,8 @@ package com.shoppingbyktor.plugins
 
 import com.shoppingbyktor.database.models.PaymentRequest
 import com.shoppingbyktor.database.models.WisListRequest
+import com.shoppingbyktor.database.models.address.AddressDeleteRequest
+import com.shoppingbyktor.database.models.address.AddressRequest
 import com.shoppingbyktor.database.models.bands.BrandRequest
 import com.shoppingbyktor.database.models.cart.CartDeleteRequest
 import com.shoppingbyktor.database.models.cart.CartRequest
@@ -70,6 +72,14 @@ fun Application.configureRequestValidation() {
         }
         validate<CartDeleteRequest> { cart ->
             cart.validation()
+            ValidationResult.Valid
+        }
+        validate<AddressRequest> { address ->
+            address.validation()
+            ValidationResult.Valid
+        }
+        validate<AddressDeleteRequest> { address ->
+            address.validation()
             ValidationResult.Valid
         }
         validate<WisListRequest> { wishlist ->
