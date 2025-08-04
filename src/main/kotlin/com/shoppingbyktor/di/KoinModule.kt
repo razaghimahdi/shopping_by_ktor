@@ -1,5 +1,6 @@
 package com.shoppingbyktor.di
 
+import com.shoppingbyktor.modules.address.controller.AddressController
 import com.shoppingbyktor.modules.auth.controller.AuthController
 import com.shoppingbyktor.modules.brand.controller.BrandController
 import com.shoppingbyktor.modules.cart.controller.CartController
@@ -34,6 +35,7 @@ val controllerModule = module {
     single { ShopController() }
     single { ShopCategoryController() }
     single { AuthController() }
+    single { AddressController() }
     single { ProfileController() }
     single { WishListController() }
     single { PaymentController() }
