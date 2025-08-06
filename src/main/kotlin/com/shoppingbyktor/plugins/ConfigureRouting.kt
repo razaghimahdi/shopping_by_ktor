@@ -8,6 +8,7 @@ import com.shoppingbyktor.modules.brand.routes.brandRoutes
 import com.shoppingbyktor.modules.brand.controller.BrandController
 import com.shoppingbyktor.modules.cart.routes.cartRoutes
 import com.shoppingbyktor.modules.cart.controller.CartController
+import com.shoppingbyktor.modules.comment.controller.CommentReviewController
 import com.shoppingbyktor.modules.consent.routes.consentRoutes
 import com.shoppingbyktor.modules.consent.controller.ConsentController
 import com.shoppingbyktor.modules.home.controller.HomeController
@@ -26,8 +27,7 @@ import com.shoppingbyktor.modules.productsubcategory.routes.productSubCategoryRo
 import com.shoppingbyktor.modules.productsubcategory.controller.ProductSubCategoryController
 import com.shoppingbyktor.modules.profile.routes.profileRoutes
 import com.shoppingbyktor.modules.profile.controller.ProfileController
-import com.shoppingbyktor.modules.review_rating.routes.reviewRatingRoutes
-import com.shoppingbyktor.modules.review_rating.controller.ReviewRatingController
+import com.shoppingbyktor.modules.comment.routes.commentReviewRoutes
 import com.shoppingbyktor.modules.search.controller.SearchController
 import com.shoppingbyktor.modules.search.routes.searchRoutes
 import com.shoppingbyktor.modules.shipping.routes.shippingRoutes
@@ -40,7 +40,6 @@ import com.shoppingbyktor.modules.wishlist.routes.wishListRoutes
 import com.shoppingbyktor.modules.wishlist.controller.WishListController
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
@@ -53,7 +52,7 @@ fun Application.configureRoute() {
     val productCategoryController: ProductCategoryController by inject()
     val productSubCategoryController: ProductSubCategoryController by inject()
     val productController: ProductController by inject()
-    val reviewRatingController: ReviewRatingController by inject()
+    val reviewRatingController: CommentReviewController by inject()
     val cartController: CartController by inject()
     val addressController: AddressController by inject()
     val wishListController: WishListController by inject()
@@ -78,7 +77,7 @@ fun Application.configureRoute() {
         productSubCategoryRoutes(productSubCategoryController)
         productRoutes(productController)
         searchRoutes(searchController)
-        reviewRatingRoutes(reviewRatingController)
+        commentReviewRoutes(reviewRatingController)
         cartRoutes(cartController)
         addressRoutes(addressController)
         wishListRoutes(wishListController)
