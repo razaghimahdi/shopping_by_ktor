@@ -4,6 +4,7 @@ import com.shoppingbyktor.modules.address.controller.AddressController
 import com.shoppingbyktor.modules.auth.controller.AuthController
 import com.shoppingbyktor.modules.brand.controller.BrandController
 import com.shoppingbyktor.modules.cart.controller.CartController
+import com.shoppingbyktor.modules.comment.controller.CommentReviewController
 import com.shoppingbyktor.modules.consent.controller.ConsentController
 import com.shoppingbyktor.modules.home.controller.HomeController
 import com.shoppingbyktor.modules.order.controller.OrderController
@@ -13,7 +14,6 @@ import com.shoppingbyktor.modules.product.controller.ProductController
 import com.shoppingbyktor.modules.productcategory.controller.ProductCategoryController
 import com.shoppingbyktor.modules.productsubcategory.controller.ProductSubCategoryController
 import com.shoppingbyktor.modules.profile.controller.ProfileController
-import com.shoppingbyktor.modules.review_rating.controller.ReviewRatingController
 import com.shoppingbyktor.modules.search.controller.SearchController
 import com.shoppingbyktor.modules.shipping.controller.ShippingController
 import com.shoppingbyktor.modules.shop.controller.ShopController
@@ -39,7 +39,7 @@ val controllerModule = module {
     single { ProfileController() }
     single { WishListController() }
     single { PaymentController() }
-    single { ReviewRatingController() }
+    single { CommentReviewController() }
     single { PolicyController() }
     single { ConsentController() }
 }
