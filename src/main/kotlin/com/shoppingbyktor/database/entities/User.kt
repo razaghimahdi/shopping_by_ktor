@@ -28,15 +28,20 @@ class UserDAO(id: EntityID<Long>) : BaseIntEntity(id, UserTable) {
 
 
     fun loggedInWithToken() = LoginResponse(
-       JwtController.tokenProvider(JwtTokenRequest(id.value, email))
+        JwtController.tokenProvider(JwtTokenRequest(id.value, email))
     )
+
+    fun response() = UserResponse(
+        email = email,
+        name = name
+    )
+
 }
 
 data class UserResponse(
-    val id: Long,
     val email: String,
     var name: String
 )
 
-data class LoginResponse( val accessToken: String)
+data class LoginResponse(val accessToken: String)
 data class ChangePassword(val oldPassword: String, val newPassword: String)
